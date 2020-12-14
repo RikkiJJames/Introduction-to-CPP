@@ -1,0 +1,17 @@
+#include <iostream>
+ 
+using std::cout;
+using std::endl;
+
+int age {18}; // global variable
+ 
+int main() {
+    
+    int age {16};    // local variable
+    
+    cout << "My age is: " << age <<  endl; // local variable
+    cout << "My age is: " << ::age <<  endl; // global variable
+
+    return 0;
+}
+
