@@ -1,0 +1,63 @@
+// Primitive Types
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+int main() {
+   /***********************************************
+    *  Character type
+    **********************************************/
+    char middle_initial {'J'};  // Characters are declared using single quotes
+    cout << "My middle initial is " << middle_initial << endl;
+    
+    /***********************************************
+    *  Integer types
+    **********************************************/
+    unsigned short int exam_score {78};  // same as unsigned short exam_score {78};
+    cout << "My exam score was " << exam_score << endl;
+
+    int countries {193};
+    cout << "There are " << countries<< " countries in the world" << endl;
+    
+    long people_in_london {8'173'941};
+    cout << "There are about " << people_in_london << " people in London" << endl;
+   
+    long long people_on_earth  {7'600'000'000};     // long long to prevent possible overflow
+    cout << "There are about " << people_on_earth << " people on earth" << endl;
+    
+    long long distance_to_proxima_centauri {40'208'000'000'000};
+    cout << "The distance to the nearest star is " << distance_to_proxima_centauri << " kilometers away" << endl;
+    
+   
+    /***********************************************
+    *  Floating point types
+    **********************************************/
+    float  car_payment {47.32};
+    cout << "My car insurance is " << car_payment << " GBP" << endl;
+    
+    double pi {3.14159};
+    cout << "PI is " << pi << endl;
+    
+    long double large_amount {2.7e120};
+    cout << large_amount << " is a very big number" << endl;
+    
+    /***********************************************
+    *  Boolean type
+    **********************************************/
+    bool game_over {false};
+    cout << "The value of gameOver is " << game_over << endl;
+    
+    /***********************************************
+    *  Overflow example
+    **********************************************/
+    short value1 {30000};
+    short value2 {1000};
+    short  product {value1 * value2};
+    
+    cout << "The product of " << value1 <<  " and " << value2 << " is " <<  product << endl;
+    
+    return 0;
+}
+
