@@ -1,8 +1,8 @@
 #include <iostream>
-#include <climits>      // climits must be included for integer types
-                        // Similar information for floating point numbers
-                        // is contained in <cfloat>
-
+#include <climits> // climits must be included for integer types
+#include <cfloat>  // cfloats must be included for floar types
+                        
+                      
 using std::cout;
 using std::endl;
 
@@ -50,6 +50,7 @@ void limits(){
     cout << "short: " << SHRT_MIN << endl;
     cout << "long: " << LONG_MIN << endl; 
     cout << "long long: " << LLONG_MIN << endl;
+//     
     cout << "========================" << endl;
     
     cout << "Maximum values:" << endl;
@@ -58,13 +59,35 @@ void limits(){
     cout << "short: " << SHRT_MAX << endl;
     cout << "long: " << LONG_MAX << endl; 
     cout << "long long: " << LLONG_MAX << endl;
+//    
+
+    cout << "======Float Values=====" << endl;
     
+    cout << "Minimum values:" << endl;
+    cout << "========================" << endl;
+    cout << "float: " << FLT_MIN << endl;
+    cout << "double: " << DBL_MIN << endl;
+    cout << "long double: " << LDBL_MIN << endl;
+    
+    
+    cout << "Maximum values:" << endl;
+    cout << "========================" << endl;
+    cout << "float: " << FLT_MAX << endl;
+    cout << "double: " << DBL_MAX << endl;
+    cout << "long double: " << LDBL_MAX << endl;
+    
+//Number of decimal digits that can be rounded into a floating-point and back without change in the number of decimal digits.
+    cout << "Significant Digits:" << endl;
+    cout << "========================" << endl;
+    cout << "float max digits: " << FLT_DIG << endl;
+    cout << "double max digits: " << DBL_DIG << endl;
+    cout << "long double max digits: " << LDBL_DIG << endl;
 }
 int main() {
 
     size();
     limits();
-    
+
     return 0;
 }
 
