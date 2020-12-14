@@ -1,3 +1,5 @@
+// Challenge
+
 /* 
 Rikki's Carpet Cleaning Service
 Charges:
@@ -46,10 +48,10 @@ int main() {
     int total {(s_rooms*s_charge)+(l_rooms*l_charge)};
         
     cout << "Estimate for carpet cleaning service" << endl;
-    cout << "Number of small rooms: $"<<s_rooms << endl;
-    cout << "Number of large rooms: $"<<l_rooms << endl;
-    cout << "Price per small room: $"<<s_charge << endl;
-    cout << "Price per large room: $"<<l_charge << endl;
+    cout << "Number of small rooms: $"<< s_rooms << endl;
+    cout << "Number of large rooms: $"<< l_rooms << endl;
+    cout << "Price per small room: $"<< s_charge << endl;
+    cout << "Price per large room: $"<< l_charge << endl;
     cout << "Cost : "<<total << endl;
     cout << "Tax: $"<<total*s_tax << endl;
     cout << "===============================" << endl;
