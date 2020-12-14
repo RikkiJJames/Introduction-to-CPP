@@ -239,47 +239,61 @@ Arrays are zero indexed which means the first element and last element have the 
 
 
 ```c++
+//Accessing array elements
 #include <iostream>
 
 using namespace std;
 
-//Accessing array elements
-int arr1 [] = {1,2,3};
+int main(){
 
-cout << arr[0] << endl; // returns 1
-cout << arr[1] << endl; // returns 2
-cout << arr[2] << endl; // returns 3
+ int arr1 [] = {1,2,3};
+
+ cout << arr[0] << endl; // returns 1
+ cout << arr[1] << endl; // returns 2
+ cout << arr[2] << endl; // returns 3
+
+ return 0;
+}
 ```
-###### No Index Bounds Checking
+##### No Index Bounds Checking
 
 C++ does not out of bounds index checking. This means that accessing an element that does not exist in the array will still compile:
 
 ```c++
+//Accessing array elements
 #include <iostream>
 
 using namespace std;
 
-//Accessing array elements
-int arr1 [] = {1,2,3};
+int main(){
+ int arr1 [] = {1,2,3};
 
-cout << arr[3] << endl; // Unexpected results
-cout << arr[-1] << endl; // Unexpected results
+ cout << arr[3] << endl; // Unexpected results
+ cout << arr[-1] << endl; // Unexpected results
+
+ return 0;
+
+}
 ```
 
 Earlier it was mentioned that elements in an array are stored in contiguous memory locations, meaning they are stored in consecutive blocks of memory. 
 For instance if the size of an integer is 4 bytes then the difference between the first and second element in an array will differ by 4 bytes
 
 ```c++
-#include <iostream
+//Accessing array elements
+#include <iostream>
 
 using namespace std;
 
-//Accessing array elements
-int arr1 [] = {1,2,3};
+int main(){
+ int arr1 [] = {1,2,3};
 
-cout << &arr[0] << endl; // Returns 0x6ffe14
-cout << &arr[1] << endl; // Returns 0x6ffe18
-cout << &arr[2] << endl; // Returns 0x6ffe1c
+ cout << &arr[0] << endl; // Returns 0x6ffe14
+ cout << &arr[1] << endl; // Returns 0x6ffe18
+ cout << &arr[2] << endl; // Returns 0x6ffe1c
+
+return 0;
+}
 ```
 #### Multidimensional Arrays
 
@@ -346,19 +360,22 @@ Some examples are shown below:
 
 using namespace std;
 
+int main(){
+ vector<int> vect1;  // Empty vector
+ vector<int> vect2(3, 10); // Creates a vector with a size of three with a value of 10 for all elements
+ vector<int> vect3{ 10, 20, 30 }; // Creates an vector that contains the values 10, 20 & 30
 
-vector<int> vect1;  // Empty vector
-vector<int> vect2(3, 10); // Creates a vector with a size of three with a value of 10 for all elements
-vector<int> vect3{ 10, 20, 30 }; // Creates an vector that contains the values 10, 20 & 30
+ // Initialise from an array
+ int arr1[] = {1,2,3,4};
+ int n = sizeof(arr1) / sizeof(arr1[0]);
+ vector<int> vect4 (arr1, arr1 + n ) // Creates a vector copy of arr1
 
-// Initialise from an array
-int arr1[] = {1,2,3,4};
-int n = sizeof(arr1) / sizeof(arr1[0]);
-vector<int> vect4 (arr1, arr1 + n ) // Creates a vector copy of arr1
+ // Initialise from another vector
+ vector<int> vect5 (vect3) // Creates copy of vect3
+ vector<int> vect6(vect3.begin(), vect3.end()); // Creates copy of vect3
 
-// Initialise from another vector
-std::vector<int> vect5 (vect3) // Creates copy of vect3
-vector<int> vect6(vect3.begin(), vect3.end()); // Creates copy of vect3
+ return 0;
+}
 ```
 
 The size of a vector can be determined using;
@@ -368,6 +385,7 @@ The size of a vector can be determined using;
 #include <vector>
 
 using namespace std;
+
 int main(){
  vector <int> vect (5,100); // Creates a vector with a size of five with a value of 100 for all elements
  cout << vect.size(); // Returns 5
