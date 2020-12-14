@@ -1,0 +1,28 @@
+// Declaring and initializing variables
+#include <iostream>
+
+using std::cout;
+using std::cin;
+using std::endl;
+
+// This program will calculate the volume of a room in cubed metres
+
+int main() {
+
+    cout << "Enter the width of the room: ";
+    int room_width {0};
+    cin >> room_width;
+    
+    cout << "Enter the length of the room: ";    
+    int room_length {0};
+    cin >> room_length;
+    
+    cout << "Enter the height of the room: ";    
+    int room_height {0};
+    cin >> room_height;
+    
+    cout << "The volume of the room is " << room_width * room_length * room_height << " metres cubed." << endl;
+    
+    return 0;
+}
+
