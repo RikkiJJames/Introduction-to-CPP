@@ -1,0 +1,34 @@
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+void display_array(int a [], int size){
+
+    cout << "=============" << endl;
+    for (int i {};i<size;i++){
+        cout << a[i] << endl;
+    }
+}
+
+int main(){
+    
+    int arr1 [3]; // Array with a size of three full or garbage data
+    int arr2 [3] = {1,2,3}; // Array of size three containing the numbers 1,2 & 3
+    int arr3 [6] = {1,2,3}; // Array of size three containing the numbers 1,2 & 3 followed by zeros for the remainder
+    int arr4 [] = {1,2,3}; // Array of size three containing the numbers 1,2 & 3
+    int arr5 [3] = {}; // Empty Array with a size of three 
+    
+    cout<<"arr1 contents" << endl;
+    display_array(arr1,3);
+    cout<<"arr2 contents" << endl;
+    display_array(arr2,3);
+    cout<<"arr3 contents" << endl;
+    display_array(arr3,6);
+    cout<<"arr4 contents" << endl;
+    display_array(arr4,3);
+    cout<<"arr5 contents" << endl;
+    display_array(arr5,3);
+    
+    return 0;
+}
