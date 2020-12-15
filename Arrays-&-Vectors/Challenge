@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+using std::vector;
+using std::cout;
+using std::endl;
+
+void display(vector <int> &vec){
+    
+    cout<<"The numbers in the vector are: ";
+    
+    cout<<"[ ";
+    for (auto i :vec){
+        cout<<i<<" ";
+    }
+    cout<<"]";
+    cout << endl;
+    
+    cout<<"The size of vec1 is: "<<vec.size()<<endl;
+}
+
+void display_2d (vector <vector <int>> &vec){
+    
+    cout<<"The numbers in the vector are: ";
+    
+    cout<<"[ ";
+    for (auto i :vec){
+        for (auto j:i){
+            cout<<j<<" ";
+        }
+    
+    }
+    cout<<"]"<<endl;
+}
+
+int main() {
+    
+    vector <int> vec1;
+    vector <int> vec2;
+    
+    cout<<"========vec1========"<<endl;
+    vec1.push_back(10);
+    vec1.push_back(20);
+    display (vec1);
+    
+    cout<<"========vec2========"<<endl;
+    vec2.push_back(100);
+    vec2.push_back(200);
+    display(vec2);
+    
+    vector <vector<int>> vec3;
+    
+    vec3.push_back(vec1);
+    vec3.push_back(vec2);
+    
+    cout<<"========vec3========"<<endl;
+    
+    display_2d(vec3);
+
+    vec1.at(0)=1000;
+    
+    display_2d (vec3);
+    
+    return 0;
+}
+
