@@ -404,6 +404,8 @@ As vectors can also use iterators there are different ways to access vector elem
 |vect.front()| Returns first element in the vector|
 |vect.back()| Returns last element in the vector|
 
+For an example on how to access vector elements click [here](Arrays-&-Vectors/Accessing_Vector_Elements)
+
 #### Modifying Vectors
 
 | Function | Output |
@@ -412,8 +414,8 @@ As vectors can also use iterators there are different ways to access vector elem
 |vect.push_back(a)| Pushes element 'a' into the back of vect and increases vector size by 1|
 |vect.pop_back()| Removes the element from back of the vector and decreases vector size by 1|
 |vect.insert(\*position, value)| Inserts an element with 'value' at 'position' |
-|vect.erase(\*position) or vect.erase(\*start, \*end) | Removes the element at 'position' or the range 'start' and 'end'. |
-|vect.remove(\*start,\*end,value) | Removes all elements which are equal to 'value' within the range of 'start' and 'end' and returns an iterator to the new end of that range |
+|vect.erase(\*position) or vect.erase(\*start, \*end) | Removes the element at 'position' or the range 'start' and 'end'. Includes 'start', does not include 'end' |
+|vect.remove(\*start,\*end,value) | Defined in the <algorithm> library. Removes all elements which are equal to 'value' within the range of 'start' and 'end' and returns an iterator to the new end of that range |
 |vect.remove_if(\*start, \*end, func) | Removes element within the range of'start' and 'end' if func is true |
 |vect.swap(vect1)| Exchanges the content of vect with vect1 as long is it contains the same datatype, difference in sizes do not matter|
 |vect.clear()| Removes all elements from vector, leaving it with a size of 0|
@@ -421,6 +423,12 @@ As vectors can also use iterators there are different ways to access vector elem
 |vect.emplace_back(value)| Pushes element 'a' into the back of vect and increases vector size by 1. More efficient than push_back|
 
 \*parameter is an iterator e.g for the range of an entire vector start = vect.begin() and end = vect.end()
+
+For an example on how to access vector elements click [here](Arrays-&-Vectors/Vector_Modifying_Functions)
+
+#### Section Challenge
+
+In this challenge two vectors are declared, initialised and push_back into another to form a 2d vector. The 2D vector is printed out and one of the orignal vector elements are modified to show that the 2D vector holds a copy of the original and so stays the same. The challenge can be found [here](Arrays-&-Vectors/Challenge).
 
 ### Section 3 - Characters & Strings
 
