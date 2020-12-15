@@ -38,6 +38,8 @@ My introductory guide into C++
 
 ### Section 1 - Variables & Constants
 
+### Variables
+
 #### Datatypes
 A variable is a name allocated to a value in memory. It is called a variable as the value can change throughout the program.
 In C++ the variable must be declared before use and are derived from the primitive datatypes listed below:
@@ -187,7 +189,7 @@ int main() {
 
 To solve this problem the scope resolution operator :: can be used. An example of this can be seen [here](Variables-&-Constants/Local_&_Global_Variables)
 
-#### Constants
+### Constants
 
 Constants are defined using the const keyword and are variables which cannot change their value once defined.
 The values assigned to a constant is known as a literal.
@@ -209,11 +211,13 @@ int main(){
 }
 ```
 
-#### Section 1 Challenge
+### Section 1 Challenge
 
 Using all the information so far, a carpet cleaning service price estimator which determines the total cost of cleaning; depending on the size and number of rooms and including service tax to the total can be found [here](Variables-&-Constants/Challenge).
 
 ### Section 2 - Arrays & Vectors
+
+### Arrays
 
 An array is a collection of items stored in contiguous memory locations, enabling the handling of large amounts of data.
 All elements within an array must be of the same datatype and are static, which means their size is fixed and must be known at compile time.
@@ -427,11 +431,35 @@ For an example on how to access vector elements click [here](Arrays-&-Vectors/Ac
 
 For an example on how to access vector elements click [here](Arrays-&-Vectors/Vector_Modifying_Functions)
 
-#### Section 2 Challenge
+### Section 2 Challenge
 
 In this challenge two vectors are declared, initialised and push_back into another to form a 2d vector. The 2D vector is printed out and one of the orignal vector elements are modified to show that the 2D vector holds a copy of the original and so stays the same. The challenge can be found [here](Arrays-&-Vectors/Challenge).
 
 ### Section 3 - Characters & Strings
+
+In C++ there are two types of strings: C-style strings and C++ strings. 
+
+### C-style Strings
+
+Strings are defined as an array of characters with a null character '\0' being used to terminate it.
+
+A c-style array can be declared using the syntax below:
+ 
+```c++
+char string[50]; // declares a string of 49 letters and a null character
+char string_name [] = "String"; //declares a string containing {"S","t","r","i","n","g","\0"}
+```
+#### C-style String Functions
+
+There are various functions that can be used with c-style functions that are contained within the <cstring> libary. As shown below:
+ 
+#### C-string Functions
+| Function | Output |
+| :-:| :-:|
+|strlen(c)| Returns the length of 'c' not including the null character|
+|strcpy(dest,source)| Copies and overwrite the contents of 'source' to 'dest' |
+|strcat(dest,source)| Copy the contents of 'source' append it to the end of 'dest' starting with the null character|
+|strrchr(string, c) | Returns a pointer to the last occurance of the character 'c'. If the character is not present in the string 'null' is returned|
 
 There are various functions that can be used with characters contained within the <cctype> libary which must be included.
 They fit into two categories: Testing and Converting as shown below:
@@ -454,4 +482,7 @@ They fit into two categories: Testing and Converting as shown below:
 | :-:| :-:|
 |tolower(c)| returns lowercase of c|
 |toupper(c)| returns uppercase of c |
+
+Examples of the use of these functions can be seen [here](Characters-&-Strings/Char_Functions)
+
 
