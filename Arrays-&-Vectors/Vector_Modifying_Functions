@@ -1,0 +1,168 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
+
+void print_contents(vector <int> &a){
+    
+    cout << "[ ";
+    for (auto i:a){
+        cout << i <<" "; 
+    }
+    
+    cout<<" ]"<<endl;
+}
+
+bool is_even(int x){
+    
+    return x%2==0;
+} 
+
+
+int main(){
+    
+    vector <int> vect; //empty vector
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //assign
+    cout<<"=========Assign========" << endl;
+    vect.assign(5,100);
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //push_back
+    cout<<"=========Push Back========" << endl;
+    vect.push_back(7);
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //pop_back
+    cout<<"=========Pop Back========" << endl;
+    vect.pop_back();
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //insert
+    cout<<"=========Insert========" << endl;
+    vect.insert(vect.begin()+2,200); //inserts 200 into third position
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //erase
+    cout<<"=========Erase With Position========" << endl;
+    vect.erase(vect.begin()+2); //removes element in third position
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    cout<<"=========Erase With Range========" << endl;
+    vect.erase(vect.begin(),vect.begin()+2); //removes all elements between first and second position
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //remove
+    cout<<"=========Remove========" << endl;
+    
+    vect.push_back(10);
+    vect.push_back(20);
+    vect.push_back(17);
+    cout << "Before Remove: ";
+    print_contents(vect);
+    std :: vector <int> :: iterator it; // integer vector iterator 
+    it = std :: remove (vect.begin(), vect.end() ,100); // Removes all elements equal to 100 and sets 'it' to the last value in the range
+    
+    cout << "After Remove: ";
+    cout << "[ ";
+    for (vector <int> :: iterator i=vect.begin(); i!=it;i++){
+        
+        cout << *i << " "; 
+    }
+    cout<<"] " << endl;
+    
+    cout << "Original Vector: ";
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //Erasing Removed Elements
+    vect.erase(it,vect.end());
+    cout << "Erasing removed elements: ";
+    print_contents(vect);
+    cout << "The size of the vector now is: " <<vect.size() << endl;
+    cout << endl;
+    
+    
+    //remove if
+    cout<<"=========Remove If========" << endl;
+    cout << "Before Remove: ";
+    print_contents(vect);
+    vector <int> :: iterator it1;     
+    it1 = std :: remove_if (vect.begin(), vect.end() , is_even);
+    cout << "After Remove: ";
+    cout << "[ ";
+    for (vector <int> :: iterator i=vect.begin(); i!=it1;i++){
+        
+        cout << *i << " "; 
+    }
+    
+    
+    cout<<"] " << endl;
+    
+    cout << "Original Vector: ";
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //Erasing Removed Elements
+    vect.erase(it1,vect.end());
+    cout << "Erasing removed elements: ";
+    print_contents(vect);
+    cout << "The size of the vector now is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //swap
+    cout<<"=========Swap========" << endl;
+    vector<int> vect1 = {1,2,3,4,5};
+    vect.swap(vect1); //swaps contents of vect with vect1
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //clear
+    cout<<"=========Clear========" << endl;
+    vect.clear(); //removes all elements
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //emplace
+    cout<<"=========Emplace========" << endl;
+    vect.emplace(vect.begin(),7); //adds 7 to the front
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    //emplace_back
+    cout<<"=========Emplace Back========" << endl;
+    vect.emplace_back(49); //adds 49 to the front
+    print_contents(vect);
+    cout << "The size of the vector is: " <<vect.size() << endl;
+    cout << endl;
+    
+    
+    
+    
+    return 0;
+    
+}
