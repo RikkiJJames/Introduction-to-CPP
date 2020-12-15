@@ -4,13 +4,13 @@ My introductory guide into C++
 
 ## Contents
 
-* [Section 1 - Variables & Constants](#section-1---variables-&-constants)
+* [Section 1 - Variables & Constants](#section-1---variables--constants)
   * [Datatypes](#datatypes)
   * [Declaring Variables](#declaring-variables)
   * [Variable Scope](#variable-scope)
   * [Constants](#constants)
-  * [Section Challenge](#section-challenge)
-* Section 2 - Arrays & Vectors
+  * [Section 1 Challenge](#section-1-challenge)
+* [Section 2 - Arrays & Vectors](#section-2---arrays--vectors)
   * [Declaring Arrays](#declaring-arrays)
   * [Accessing Array Elements](#accessing-array-elements)
   * [Multidimensional Arrays](#multidimensional-arrays)
@@ -18,7 +18,8 @@ My introductory guide into C++
   * [Declaring Vectors](#declaring-vectors)
   * [Accessing Vector Elements](#accessing-vector-elements)
   * [Modifying Vectors](#modifying-vectors)
-* [Characters & Strings](#section-2---characters-&-strings)
+  * [Section Challenge](#section-2-challenge)
+* [Characters & Strings](#section-2---characters--strings)
   * Testing Functions
   * Conversion Functions
 * Statements & Operators
@@ -208,7 +209,7 @@ int main(){
 }
 ```
 
-#### Section Challenge
+#### Section 1 Challenge
 
 Using all the information so far, a carpet cleaning service price estimator which determines the total cost of cleaning; depending on the size and number of rooms and including service tax to the total can be found [here](Variables-&-Constants/Challenge).
 
@@ -426,7 +427,7 @@ For an example on how to access vector elements click [here](Arrays-&-Vectors/Ac
 
 For an example on how to access vector elements click [here](Arrays-&-Vectors/Vector_Modifying_Functions)
 
-#### Section Challenge
+#### Section 2 Challenge
 
 In this challenge two vectors are declared, initialised and push_back into another to form a 2d vector. The 2D vector is printed out and one of the orignal vector elements are modified to show that the 2D vector holds a copy of the original and so stays the same. The challenge can be found [here](Arrays-&-Vectors/Challenge).
 
