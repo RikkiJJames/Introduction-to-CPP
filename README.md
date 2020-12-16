@@ -32,8 +32,20 @@ My introductory guide into C++
   * [Strings](#strings)
     * [C-Style Strings](#c-style-strings)
     * [C++ Strings](#c-strings)
-   [Section 4 Challenge](#section-4-challenge)
-* Controlling Program Flow
+  * [Section 4 Challenge](#section-4-challenge)
+* [Section 5 - Controlling Program Flow](#section-4---controlling-program-flow)
+  * [Conditional Statements](#conditional-statements)
+    * [If Statements](#if-statements)
+    * [Else Statements](#else-statements)
+    * [Else If Statements](#else-if-statements)
+    * [Switch Statements](#switch-statements)
+    * [Conditional Operator](#conditional-operator)
+  * [Loops](#loops)
+    * [While Loops](#while-loops)
+    * [Do/While Loops](#while-loops)
+    * [For Loops](#for-loops)
+    * [Break & Continue](#break--continue)
+  * [Section 5 Challenge](#section-5-challenge)
 * Functions
 * Pointers & References
 * OOP - Classes & Objects
@@ -159,7 +171,6 @@ int main(){
 }
 ```
 
-
 ##### Global Variables
 
 Global variables can be accessed from any part of the program and are declared at the top of the program outside of any function blocks.
@@ -272,6 +283,7 @@ Comparison operators are used to compare two values resulting in a 1 if the stat
 |>=| greater than or equal to |
 |<=| less than or equal to |
 
+
 #### Logical Operators
 
 Logical operators are used to determine logic between values:
@@ -287,7 +299,6 @@ Logical operators are used to determine logic between values:
 |<=| less than or equal to | Returns true if the lhs statement is less than or equal to the rhs|
 |>=| greater than or equal to |Returns true if the lhs statement is greater than or equal to the rhs|
 |^| xor| Returns true if either is true, but not both |
-
 
 ### Section 2 Challenge
 
@@ -654,3 +665,281 @@ Examples of their usage can be found [here](Characters-&-Strings/CPP_Strings)
 
 For this challenge I created a substitution cypher which can encrypt a message. Replacing the letters in the message with ones within a key. Only an individual in possession of the key and then decrypt the message. The challenge can be found [here](Characters-&-Strings/Challenge).
 
+### Section 5 - Controlling Program Flow
+
+### Conditional Statements
+
+Conditional statements are used to perform different actions depending on the situation.
+These can be determined using the logical operators discussed in the operators [section](#logical-operators)
+
+C++ has the following conditional statements:
+
+* if
+* else
+* else if
+* switch
+
+#### If Statements
+
+The 'if' statement is used to execute a block of code , if a condition is true. The 'if' must be lowercase to avoid throwing up an error.
+An example of an if statement can be seen below:
+
+```c++
+
+int num {};
+const int max {50};
+
+cout << "Enter a number between " << min << " and " << max << ": ";
+cin >> num; // User enters a number which is stored in 'num'
+
+// Case 1
+if (num > max){
+ cout << num << " is greater than: " << max << endl;
+}
+// Case 2
+if (num > max){
+ cout << num << " is greater than: " << max << endl;
+}
+// Case 3
+if (num == max){
+ cout << num << " is equal to: " << max << endl;
+}
+```
+
+#### Else Statements
+
+The 'else' statement is used to execute a block of code , if the same condition as above if false.
+An example can be seen below:
+
+```c++
+
+int num {};
+const int max {50};
+
+cout << "Enter a number between " << min << " and " << max << ": ";
+cin >> num; // User enters a number which is stored in 'num'
+
+if (num >= max){
+ cout << num << " is greater than or equal to : " << max << endl;
+}
+else {
+ cout << num << " is less than: " << max << endl;
+}
+```
+
+#### Else If Statements
+
+The 'else if' operator used to specify a new condition to test, if the first condition is false.
+
+```c++
+int num {2};
+
+if (num < 15){
+ cout << num << " is small";
+}
+else if (num < 5) {
+ cout << num << " is very small" << endl; // Prints this line
+}
+```
+A more detailed example of if/else/elseif statements example can be found [here](Controlling-Program-Flow/Conditional_Statement)
+
+#### Switch Statements
+
+A 'switch' statement is used to specify many alternative blocks of code to be executed.
+It evaluates a statement once and compares the output of the expression against each 'case'.
+If the output matches a case then its corresponding code block will be run.
+An example can be seen below:
+
+```c++
+int day {2};
+switch (day) {
+  case 1:
+    cout << "Monday";
+    break; // used to signify end of case
+  case 2:
+    cout << "Tuesday"; // print Tuesday as the day number is 2
+    break;
+  case 3:
+    cout << "Wednesday";
+    break;
+  case 4:
+    cout << "Thursday";
+    break;
+  case 5:
+    cout << "Friday";
+    break;
+  case 6:
+    cout << "Saturday";
+    break;
+  case 7:
+    cout << "Sunday";
+    break;
+  default: // triggers when the input doesn't match any case 
+    cout << "Sorry that's not a valid input" << endl;
+```
+
+#### Conditional Operator
+
+The conditional operator '?' is known as a ternary operator as requires three operands. 
+It can be used to replace if/else statements. For example, instead of writing the if/else statement below:
+
+```c++
+if(condition) {
+   var = X;
+} else {
+   var = Y;
+}
+```
+The conditional operator can be used:
+
+```c++
+var = (y < 10) ? X : Y;
+```
+
+More examples can be found [here](Controlling-Program-Flow/Conditional_Operator)
+### Loops
+
+Loops execute a block of code as long as a specified condition is satisfied.
+Loops are powerful because they make code more readable, save time and reduce errors.
+
+#### While Loops
+
+A 'while' loop continuously loops through the block as code as long as the condition is true.
+Therefore it is important to modify the variable used in the condition, otherwise the loop will never end.
+
+```c++
+ int num {5};
+ while (num > 0 ) {
+     cout << num << endl;
+     num--;
+     }
+// Prints countdown 5,4,3,2,1
+```
+
+
+#### Do/While Loops
+
+A 'do/while' loop a variant of the while loop. It will execute the code in the 'do' block once, before checking if the condition is true, then it will repeat the loop as long as the condition is true.
+
+```c++
+    char selection {};
+    do {
+        cout << "1. Option 1" << endl;
+        cout << "2. Option 2" << endl;
+        cout << "3. Option 3" << endl;
+        cout << "Q" << endl;
+        cout << "\nEnter your selection: ";
+        cin >> selection;
+        
+        if (selection == '1')
+            cout << "You chose: Option 1" << endl;
+        else if (selection == '2') 
+             cout << "You chose: Option 2 " << selection << endl;
+        else if (selection == '3')
+            cout << "You chose: Option 3 " << selection << endl;
+        else if (selection == 'Q' || selection == 'q')
+            cout << "Goodbye..." << endl;
+        else
+            cout << "Unknown option -- try again..." << endl;
+    
+    } while ( selection != 'q' && selection != 'Q'); // Menu keeps looping as long as the user does not press 'q' or 'Q' and quits
+    
+    cout  << endl;
+```
+
+#### For Loops
+
+A for loop allows you to specify the number of times you want to repeat the same code block. It has three statements:
+
+```c++
+
+for (statement 1;statement 2;statement 3){
+// code block
+}
+```
+* statement 1 is executed once before the execution of the code block.
+* statement 2 defines the condition for executing the code block.
+* statement 3 is executed (every time) after the code block has been executed.
+
+Examples can be seen below:
+
+```c++
+ for (int i{} ; i <= 10 ; i++)
+        cout << i << endl; // Prints out numbers 0 to 10 
+        
+ for (int i{} ; i <=10 ; i+=2)
+        cout << i << endl; // Prints out even numbers between 0 and 10
+        
+  for (int i{1}, j{5} ; i<=5 ; i++, j++)
+      cout << i << " + " << j << " = " << (i+j) << endl; // Prints out sum of i and j increasing both variables by one each time       
+```
+
+More examples can be founds [here](Controlling-Program-Flow/For_Loops)
+
+##### Range Based For Loops
+
+A range based for loop automatically executes a for loop over a range. The syntax is as follows:
+
+```c++
+for ( range_declaration : range_expression ){ 
+    // code block
+}
+```
+
+* range_declaration - a declaration of a named variable, whose has the same datatype as the range_expression. The the auto specifier is often used to automatically detect the type.
+* range_expression - any expression that represents a suitable data structure.
+
+An example can be seen below:
+
+```c++
+
+vector <int> num {1,2,3,4,5,6,7,8,9,10}
+
+for (auto x : num){
+cout << x << endl; // Prints out the numbers contained within the vector
+```
+
+##### Nested Loops
+
+Loops can also be contained within each other. When loops are "nested" the inner loop does its full iterations for every repitition of the outer loop.
+An example can be seen below:
+
+```c++
+for (int num1 {1}; num1 <=10 ; num1++) {
+        for (int num2 {1}; num2 <=10; num2++) {
+            cout << num1 << " * " << num2 << " = " << num1 * num2 << endl;
+        }
+        cout << "-----------" << endl; // Prints the multiplication table 
+    }
+```
+#### Break & Continue
+
+##### Break
+
+The break statement can also be used to jump out of a loop. For example, the code below loops through the values of 1 and 10.
+However, if the value is a multiple of 4, it will break out of the loop.
+
+```c++
+for (int i {1} ; i <= 10; i++) {
+  if (i % 4 == 0 and i != 0) {
+    break;
+  }
+  cout << i << "\n"; // Displays 0, 1, 2 & 3
+}
+```
+
+##### Continue
+
+The continue statement breaks out of a single iteration of the loop and continues with the next iteration in the loop. For example, the code below will skip multiples of 4.
+
+```c++
+for (int i {1} ; i <= 10; i++) {
+  if (i % 4 == 0 and i != 0) {
+    continue;
+  }
+  cout << i << "\n"; // Displays 0, 1, 2, 3, 5, 6, 7, 9 & 10
+}
+```
+### Section 5 Challenge
+
+This challenge was about allowing the user to select options from a menu to perform operations on the list. Operations include adding a number to a vector, printing its contents, finding the mean of its contents and finding the largest and smallest number. The challenge can be found [here](Controlling-Program-Flow/Challenge)
