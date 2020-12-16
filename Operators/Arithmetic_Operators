@@ -1,0 +1,44 @@
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+
+int main() {
+    
+    int num1 {50};
+    int num2 {100};
+    
+    int result {0};
+    
+    result = num1 + num2;
+    cout << num1 << " + " <<  num2 << " = "<< result << endl; // 150
+    
+    result = num1 - num2;
+    cout << num1 << " - " <<  num2 << " = "<< result << endl; // -50
+    
+    result = num1 * num2;
+    cout << num1 << " * " <<  num2 << " = "<< result << endl; // 5000
+    
+    result = num1 / num2;
+    cout << num1 << " / " <<  num2 << " = "<< result << endl; // 0
+    
+    cout << num1 << " / " <<  num2 << " = "<< static_cast<double>(num1) / num2 << endl; // -0.5
+    
+    result = num2 / num1;
+    cout << num2 << " / " <<  num1 << " = "<< result << endl; // 2
+    
+    result = num1 % num2;
+    cout << num1 << " % " <<  num2 << " = "<< result << endl; // 50    
+    
+    num1 = 10;
+    num2 = 3;
+    
+    result = num1 % num2;
+    cout << num1 << " % " <<  num2 << " = "<< result << endl; // 1    
+    
+    cout << endl;
+    
+    return 0;
+}
+
