@@ -1,0 +1,92 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+
+using std::cout;
+using std::cin;
+using std::endl;
+using std::vector;
+
+int main() {
+    
+    vector <int> vec{};
+    
+    char input {};
+    
+    do {
+        cout << "P - Print numbers" << endl;
+        cout << "A - Add a number" << endl;
+        cout << "M - Display mean of the numbers" << endl;
+        cout << "S - Display the smallest number" << endl;
+        cout << "L - Display the largest number" << endl;
+        cout << "Q - Quit" << endl;
+        
+        cout << "Enter your selection: " << endl;
+        cin >> input;
+        input = toupper(input);
+        cout << "You selected: " << input <<endl;
+        
+        switch(input){
+            case 'P':{
+                if (vec.empty()){
+                cout << "[] - the list is empty" << endl;    
+                } else {
+                cout << "[ ";
+                for (auto i:vec){
+                    cout << i << " ";
+                }
+                cout << "]" << endl;
+                }
+            break;
+            }
+            case 'A':{
+                int num {};
+                cout << "Enter a number to be added to the list: ";
+                cin >> num;
+                vec.push_back(num);
+                cout << num << " added"<<endl;
+            break;
+            }
+            case 'M':{
+                if (vec.empty()){
+                cout << "unable to calculate the mean - the list is empty" << endl;
+                } else {
+                int sum = accumulate(vec.begin(),vec.end(),0);
+                double mean = static_cast <double> (sum)/vec.size();
+                cout << "The mean is: " << mean << endl;
+                }
+            break;
+            }
+            case 'S':{
+            if (vec.empty()){
+                cout << "Unable to determine the smallest number - list is empty" << endl;
+            }else{
+                cout << "The smallest number in the list is: " << *min_element(vec.begin(),vec.end()) << endl;
+            }
+            break;
+            }
+            case 'L':{
+            if (vec.empty()){
+                cout<<"Unable to determine the largest number - list is empty" << endl;
+            }else{
+                cout << "The largest number in the list is: " << *max_element(vec.begin(),vec.end()) << endl;
+            }
+            break;
+            }
+            case 'Q':{
+                cout << "Exiting Program" << endl;
+            break;
+            }
+            default:
+            cout << "Unknown selection, please try again" << endl;
+        }
+    }
+    while (input!='Q');
+    
+    cout << "Goodbye" << endl;
+    
+    return 0;
+
+}
+
