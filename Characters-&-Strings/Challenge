@@ -1,0 +1,27 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    
+    string alphabet {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+    string key  {"XZNLWEBGJHQDYVTKFUOMPCIASRxznlwebgjhqdyvtkfuompciasr"};
+    
+    string input {};
+    cout<<"Enter a word to encrypt"<<endl;
+    cin>>input;
+    
+    for (size_t i{};i<input.size();i++){
+        for (size_t j {};j<alphabet.size();j++){
+            if (input.at(i)==alphabet.at(j)){
+                input.at(i)=key.at(j);
+                break;
+            }
+        }
+    }
+    cout <<"Your input has now been encrypted to: "<<input<< endl;
+    return 0;
+}
+        
+
