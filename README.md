@@ -5,24 +5,34 @@ My introductory guide into C++
 ## Contents
 
 * [Section 1 - Variables & Constants](#section-1---variables--constants)
-  * [Datatypes](#datatypes)
-  * [Declaring Variables](#declaring-variables)
-  * [Variable Scope](#variable-scope)
+  * [Variables](#variables)
+    * [Datatypes](#datatypes)
+    * [Declaring Variables](#declaring-variables)
+    * [Variable Scope](#variable-scope)
   * [Constants](#constants)
   * [Section 1 Challenge](#section-1-challenge)
-* [Section 2 - Arrays & Vectors](#section-2---arrays--vectors)
-  * [Declaring Arrays](#declaring-arrays)
-  * [Accessing Array Elements](#accessing-array-elements)
-  * [Multidimensional Arrays](#multidimensional-arrays)
+* [Section 2 - Operators](#section-2---operators)
+  * [Arithmetic Operators](#arithmetic-operators)
+  * [Assignment Operators](#assignment-operators)
+  * [Comparison Operators](#comparison-operators)
+  * [Logical Operators](#logical-operators)
+  * [Section 2 Challenge](#section-2-challenge)
+* [Section 3 - Arrays & Vectors](#section-3---arrays--vectors)
+  * [Arrays](#arrays)
+    * [Declaring Arrays](#declaring-arrays)
+    * [Accessing Array Elements](#accessing-array-elements)
+    * [Multidimensional Arrays](#multidimensional-arrays)
   * [Vectors](#vectors)
-  * [Declaring Vectors](#declaring-vectors)
-  * [Accessing Vector Elements](#accessing-vector-elements)
-  * [Modifying Vectors](#modifying-vectors)
-  * [Section Challenge](#section-2-challenge)
-* [Characters & Strings](#section-3---characters--strings)
-  * Testing Functions
-  * Conversion Functions
-* Statements & Operators
+    * [Declaring Vectors](#declaring-vectors)
+    * [Accessing Vector Elements](#accessing-vector-elements)
+    * [Modifying Vectors](#modifying-vectors)
+  * [Section 3 Challenge](#section-3-challenge)
+* [Section 4 - Characters & Strings](#section-4---characters--strings)
+  * [Characters](#characters)
+  * [Strings](#strings)
+    * [C-Style Strings](#c-style-strings)
+    * [C++ Strings](#c-strings)
+   [Section 4 Challenge](#section-4-challenge)
 * Controlling Program Flow
 * Functions
 * Pointers & References
@@ -215,7 +225,76 @@ int main(){
 
 Using all the information so far, a carpet cleaning service price estimator which determines the total cost of cleaning; depending on the size and number of rooms and including service tax to the total can be found [here](Variables-&-Constants/Challenge).
 
-### Section 2 - Arrays & Vectors
+### Section 2 - Operators
+
+Operators are used to perform operations on variables and their are four types:
+* Arithmetic - used to perform common mathematical operations
+* Assignment
+* Comparison
+* Logical 
+
+#### Arithmetic Operators
+
+|Operator|Name| Operation|
+| :-:|:-:|:-:|
+|+| Addition| Adds two values|
+|-| Subtraction| Subtracts two values|
+|* | Multiplication| Multiplies two values|
+|/| Division | Divides one value by another|
+|%| Modulus | Returns the remainder of a division operation (only works with integers)| 
+|++| Increment| Increases the value of a variable by 1|
+|--| Decrement|Decreases the value of a variable by 1|
+
+Examples on how to use these operators can be seen [here](Operators/Arithmetic_Operators)
+
+#### Assignment Operators
+
+Assignment operators are used to assign values to variables:
+
+|Operator|Same as |
+| :-:|:-:|
+|=| x = 5|
+|+=| x = x + 5|
+|-=| x = x - 5|
+|/=| x = x / 5 |
+|%=|x = x % 5 |
+
+#### Comparison Operators
+
+Comparison operators are used to compare two values resulting in a 1 if the statement is true, or 0 if false.
+
+|Operator| Name |
+| :-:|:-:|
+|==| equal to |
+|!=| not equal to|
+|>| greater than|
+|<| less than|
+|>=| greater than or equal to |
+|<=| less than or equal to |
+
+#### Logical Operators
+
+Logical operators are used to determine logic between values:
+
+
+|Operator|Name| Description |
+| :-:|:-:|:-:|
+|&&| and |Returns true if both statements are true |
+|\|\||or|Returns true if either one of the statements is true |
+|!| not |Reverse the expected result. Returns true if the result is true|
+|<| less than| Returns true if the lhs statement is less than the rhs|
+|>| greater than |Returns true if the lhs statement is greater than the rhs|
+|<=| less than or equal to | Returns true if the lhs statement is less than or equal to the rhs|
+|>=| greater than or equal to |Returns true if the lhs statement is greater than or equal to the rhs|
+|^| xor| Returns true if either is true, but not both |
+
+
+### Section 2 Challenge
+
+For this challenge a UK GBP change machine was made. Asking the user to input an amount of pennies and output its equivalent in Uk currency.
+The challange can be found [here](Operators/Challenge) 
+
+### Section 3 - Arrays & Vectors
 
 ### Arrays
 
@@ -431,18 +510,18 @@ For an example on how to access vector elements click [here](Arrays-&-Vectors/Ac
 
 For an example on how to access vector elements click [here](Arrays-&-Vectors/Vector_Modifying_Functions)
 
-### Section 2 Challenge
+### Section 3 Challenge
 
 In this challenge two vectors are declared, initialised and push_back into another to form a 2d vector. The 2D vector is printed out and one of the orignal vector elements are modified to show that the 2D vector holds a copy of the original and so stays the same. The challenge can be found [here](Arrays-&-Vectors/Challenge).
 
-### Section 3 - Characters & Strings
+### Section 4 - Characters & Strings
 
 ### Characters
 
 There are various functions that can be used with characters contained within the <cctype> library which must be included.
 They fit into two categories: Testing and Converting as shown below:
  
-##### Testing Functions
+##### Character Testing Functions
 | Function | Output |
 | :-:| :-:|
 |isalpha(c)| True if c is a letter|
@@ -454,7 +533,7 @@ They fit into two categories: Testing and Converting as shown below:
 |islower(c)| True if c is a lowercase letter|
 |isspacea(c)| True if c is whitespace|
 
-##### Conversion Functions
+##### Character Conversion Functions
 
 | Function | Output |
 | :-:| :-:|
@@ -466,7 +545,7 @@ Examples of the use of these functions can be seen [here](Characters-&-Strings/C
 ### Strings
 In C++ there are two types of strings: C-style strings and C++ strings. 
 
-#### C-style Strings
+#### C-Style Strings
 
 C-style strings are simply arrays of characters with a null character '\0' being used to terminate it. They are natively, inherited from the C language.
 The null character is automatically added. Therefore, even though a string may have 5 letters it must have a length of 6 at least.
@@ -482,11 +561,10 @@ char string_name []{ "string" }; //declares a string containing {"s","t","r","i"
 
 When printing a C-style string, std::cout prints all characters until it encounters the null terminator. If the null terminator has been accidently overwritten( e.g. by assigning a value to string_name[7]), not only will all the characters get printed std::cout will  keep printing everything in adjacent memory slots until happens to hit null terminator 
 
-##### C-style String Functions
+##### C-Style String Functions
 
 There are various functions that can be used with c-style functions that are contained within the <cstring> libary. As shown below:
  
-##### C-string Functions
 | Function | Output |
 | :-:| :-:|
 |strlen(c)| Returns the length of 'c' not including the null character|
@@ -561,7 +639,7 @@ int main(){
 
 C++ also has some added functionality as shown below:
 
-##### C++ string Functions
+##### C++ String Functions
 | Function | Output |
 | :-:| :-:|
 |s0.length()| Returns the length of 's0'|
@@ -571,3 +649,8 @@ C++ also has some added functionality as shown below:
 |s0.find(word)| Returns the index of the first occurrence of the substring 'word' in the string.  if the sub-string is not found it returns string::npos (the highest possible for a size_t structure) |
 
 Examples of their usage can be found [here](Characters-&-Strings/CPP_Strings)
+
+### Section 4 Challenge
+
+For this challenge I created a substitution cypher which can encrypt a message. Replacing the letters in the message with ones within a key. Only an individual in possession of the key and then decrypt the message. The challenge can be found [here](Characters-&-Strings/Challenge).
+
