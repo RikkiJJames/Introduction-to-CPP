@@ -19,7 +19,7 @@ My introductory guide into C++
   * [Accessing Vector Elements](#accessing-vector-elements)
   * [Modifying Vectors](#modifying-vectors)
   * [Section Challenge](#section-2-challenge)
-* [Characters & Strings](#section-2---characters--strings)
+* [Characters & Strings](#section-3---characters--strings)
   * Testing Functions
   * Conversion Functions
 * Statements & Operators
@@ -309,10 +309,10 @@ Elements in two-dimensional arrays are commonly referred by x[i][j] where i is t
 ##### Declaring Multidimensional Arrays
 
 ```c++
-//Two dimensional array:
+// Two dimensional array:
 int two_d[10][20];
 
-Three dimensional array:
+// Three dimensional array:
 int three_d[10][20][30];
 ```
 
@@ -437,34 +437,12 @@ In this challenge two vectors are declared, initialised and push_back into anoth
 
 ### Section 3 - Characters & Strings
 
-In C++ there are two types of strings: C-style strings and C++ strings. 
+### Characters
 
-### C-style Strings
-
-Strings are defined as an array of characters with a null character '\0' being used to terminate it.
-
-A c-style array can be declared using the syntax below:
- 
-```c++
-char string[50]; // declares a string of 49 letters and a null character
-char string_name [] = "String"; //declares a string containing {"S","t","r","i","n","g","\0"}
-```
-#### C-style String Functions
-
-There are various functions that can be used with c-style functions that are contained within the <cstring> libary. As shown below:
- 
-#### C-string Functions
-| Function | Output |
-| :-:| :-:|
-|strlen(c)| Returns the length of 'c' not including the null character|
-|strcpy(dest,source)| Copies and overwrite the contents of 'source' to 'dest' |
-|strcat(dest,source)| Copy the contents of 'source' append it to the end of 'dest' starting with the null character|
-|strrchr(string, c) | Returns a pointer to the last occurance of the character 'c'. If the character is not present in the string 'null' is returned|
-
-There are various functions that can be used with characters contained within the <cctype> libary which must be included.
+There are various functions that can be used with characters contained within the <cctype> library which must be included.
 They fit into two categories: Testing and Converting as shown below:
  
-#### Testing Functions
+##### Testing Functions
 | Function | Output |
 | :-:| :-:|
 |isalpha(c)| True if c is a letter|
@@ -476,7 +454,7 @@ They fit into two categories: Testing and Converting as shown below:
 |islower(c)| True if c is a lowercase letter|
 |isspacea(c)| True if c is whitespace|
 
-#### Conversion Functions
+##### Conversion Functions
 
 | Function | Output |
 | :-:| :-:|
@@ -485,4 +463,111 @@ They fit into two categories: Testing and Converting as shown below:
 
 Examples of the use of these functions can be seen [here](Characters-&-Strings/Char_Functions)
 
+### Strings
+In C++ there are two types of strings: C-style strings and C++ strings. 
 
+#### C-style Strings
+
+C-style strings are simply arrays of characters with a null character '\0' being used to terminate it. They are natively, inherited from the C language.
+The null character is automatically added. Therefore, even though a string may have 5 letters it must have a length of 6 at least.
+It is alright if the array is larger than the length of the string as the string will end with the null terminator and the rest of the characters will be ignored.
+
+A c-style array can be declared using the syntax below:
+ 
+```c++
+char string[50]; // declares a string of 49 letters and a null character
+char string_name [] = "string"; //declares a string containing {"s","t","r","i","n","g","\0"}
+char string_name []{ "string" }; //declares a string containing {"s","t","r","i","n","g","\0"}
+```
+
+When printing a C-style string, std::cout prints all characters until it encounters the null terminator. If the null terminator has been accidently overwritten( e.g. by assigning a value to string_name[7]), not only will all the characters get printed std::cout will  keep printing everything in adjacent memory slots until happens to hit null terminator 
+
+##### C-style String Functions
+
+There are various functions that can be used with c-style functions that are contained within the <cstring> libary. As shown below:
+ 
+##### C-string Functions
+| Function | Output |
+| :-:| :-:|
+|strlen(c)| Returns the length of 'c' not including the null character|
+|strcpy(dest,source)| Copies and overwrite the contents of 'source' to 'dest' |
+|strcat(dest,source)| Copy the contents of 'source' append it to the end of 'dest' starting with the null character|
+|strrchr(string, c) | Returns a pointer to the last occurance of the character 'c'. If the character is not present in the string 'null' is returned|
+|strcmp(s1, s2)|Returns 0 if s1 and s2 are the same; less than 0 if s1<s2; greater than 0 if s1>s2.|
+
+Examples of their usage can be found [here](Characters-&-Strings/C-Style_Strings)
+
+###### Usage
+Although it is important to be aware of C-style strings and know how they work. It is recommended to avoid using them and stick with C++ strings which are covered next.
+
+#### C++ Strings
+
+C++ has it's own way of storing a sequence of characters. Using a class in the standard library 'std::string'.
+In C++ strings the size of the array must be defined before compilation as it is allocated statically, this means that the size cannot be changed and any data not used is wasted. However, C++ strings allocate memory dynamically. Allowing memory to be allocated at run time depending on demand. Therefore no memory is wasted.
+
+To use C++ strings the <string> library must be included. A C++ string can be declared using the syntax below:
+ 
+```c++
+#include <iostream>
+#include <string>
+
+using std::string
+
+int main(){
+
+ string s0; // Creates an empty string
+ string s1 {"Rikki"}; // Create a string containing "Rikki"
+ string s2 {s1}; // Creates a copy of 's1'
+ string s3 {s1, 0, 3}; // Creates a string containing a substring of s1 starting at the zero index and ending and spans 3 letters "Rik"
+ string s4 (10, 'X'); // Creates a string containing 'XXXXXXXXXX'
+ 
+ return 0;
+}
+```
+
+The std::string class has all the functionality of C-style strings. However, some operations such as copying contatination and comparing are simpler in syntax:
+
+```c++
+#include <iostream>
+#include <string>
+#include <iomanip> // Needed for boolalpha
+using std::string;
+using std::cout;
+using std::endl;
+using std::boolalpha;
+
+int main(){
+
+ string first_name {"Rikki"}; 
+ string last_name {"James"};
+ 
+ // Copying
+ 
+  string copy {first_name}; // Copies the contents of 'first_name' into 'copy'
+  
+ // Concatination
+ 
+ string full_name = first_name + " " + last_name; 
+ cout << full_name << endl; // prints out"Rikki James"
+ 
+ // Comparison
+ cout << boolalpha; // Converts the 1 and 0 outputs of boolean functions to true and false;
+ string name {"rikki"};
+ cout << (name == first_name) << endl; // Returns false
+ 
+ return 0;
+}
+```
+
+C++ also has some added functionality as shown below:
+
+##### C++ string Functions
+| Function | Output |
+| :-:| :-:|
+|s0.length()| Returns the length of 's0'|
+|s0.substr(a,n)| Returns a newly constructed string object containing a substring of 's0' starting at position 'a' and continuing for 'n' characters |
+|s0.erase(a,n)| Erases characters in the string 's0' starting at position 'a' and continuing for 'n' characters|
+|getline(cin, s0)| Extracts characters from the input stream and replaces the contents of the string object 's0'|
+|s0.find(word)| Returns the index of the first occurrence of the substring 'word' in the string.  if the sub-string is not found it returns string::npos (the highest possible for a size_t structure) |
+
+Examples of their usage can be found [here](Characters-&-Strings/CPP_Strings)
