@@ -1,27 +1,36 @@
 #include <iostream>
 
-using namespace std;
+using std::cin;
+using std::cin;
+using std::cout;
+using std::endl;
+
 
 int main() {
     
     int total{-1},  remain{};
-    const int dollars{100}, quarters {25}, dimes {10}, nickel{5}, penny{1};
+    const int pound {100}, fifty {50}, twenty {20}, ten {10}, five {5}, two{2}, penny {1};
     
-    do {cout<<"Please enter an amount of cents: ";
+    do {cout << "Please enter an amount in penny(s): ";
     cin >> total;
     }
-    while (total<=0);
+    while (total <= 0);
     
-    cout << endl; 
-    cout << "dollars: " << total / dollars << endl;
-    total = total % dollars;
-	cout << "quarters: " << total / quarters << endl;
-    total = total % quarters;
-	cout << "dimes: "<<total/dimes << endl;
-    total = total % dimes;
-	cout << "nickels: "<<total / nickel << endl;
-    total = total % nickel;
-	cout << "pennies: "<< total / penny << endl;
+    cout << endl;
+    cout << "Pounds: " << total / pound << endl;
+    total = total % pound;
+	cout << "Fifty Pence : " << total / fifty << endl;
+    total = total % fifty;
+	cout << "Twenty Pence: " << total / twenty << endl;
+    total = total % twenty;
+	cout << "Ten Pence: " << total / ten << endl;
+    total = total % ten;
+	cout << "Five Pency: " << total / five << endl;
+    total = total % five;
+	cout << "Two Pency: " << total / two << endl;
+    total = total % two;
+	cout << "Penny: " << total / penny << endl;
+    
     return 0;
 }
 
