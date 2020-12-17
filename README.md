@@ -1223,3 +1223,128 @@ Another example to find the Fibonacci value of a number using recursion can be f
 This challenge has the same purpose as the previous allowing the user to select options from a menu to perform operations on the list. However, all operations are now done within separate functions. The challenge can be found [here](Functions/Challenge)
 
 ### Section 7 - Pointers & References
+
+### Pointers 
+
+A pointer is a variable that can stores the memory address of a variable or function. They are used as they allow data to be access that lies outside the scope.
+They also allow memory to allocated dynamically on the heap (will be discussed later). Variables allocated dynamically do not have a name, therefore the only way to access it is through a pointer.
+
+#### Declaring Pointers
+
+The datatype of the pointer must match the data you data you are storing in the address, otherwise you will get a compiler error.
+The general declaration of a pointer has the following syntax:
+
+```c++
+datatype *ptr_name;
+```
+Some examples have been shown below:
+
+```c++
+int *int_ptr;
+char *char_ptr;
+string *string_ptr;
+```
+
+##### Null Pointers
+
+Uninitialised pointers that aren't set to hold a value can be pointing to any memory address which could be dangerous.
+A **null pointer** is the equivalent to initialising a variable to zero. A pointer can be initialised to null via the syntax shown below:
+
+```c++
+int *int_ptr{null_ptr};
+char *char_ptr{null_ptr};
+string *string_ptr{null_ptr};
+```
+
+##### Pointer Size
+
+The size of a pointer isn't defined by the datatype it points towards. All pointers in a program are the same size:
+
+```c++
+int *int_ptr{null_ptr};
+char *char_ptr{null_ptr};
+string *string_ptr{null_ptr};
+
+cout << "sizeof of int_ptr is: " << sizeof int_ptr << endl; // 8 bits
+cout << "sizeof of char_ptr is: " << sizeof char_ptr << endl; // 8 bits
+cout << "sizeof of string_ptr is: " << sizeof string_ptr << endl; // 8 bits
+```
+
+#### Assigning Pointers
+
+##### Address Operator
+
+The ampersand symbol '&'is the address operator and returns the address of a variable:
+
+For instance, when used with an integer you get the following:
+
+```c++
+int num{5};
+cout << "Value of num is: " << num << endl;	// 5	
+cout << "sizeof of num is: " << sizeof num << endl; // 4 bits (depends on compiler)
+cout << "Address of num is: " << &num << endl; // memory address 0x61fe1c
+```
+
+When done with a pointer to an integer you get the following:
+
+```c++
+int *p;
+    cout << "\nValue of p is: " << p << endl;   // memory address the pointer is pointing to 0x7317a0
+    cout << "Address of p is: " << &p << endl; // memory address of the pointer 0x61fe10
+    cout << "sizeof of p is: " << sizeof p << endl; // 8 bits (depends on compiler)
+    p = nullptr; // Points it nowhere
+    cout << "\nValue of p is: " << p << endl; // Prints 0
+```
+
+##### Assigning Variables Addresses To Pointers
+
+To assign a variable to a pointer the address operator must be used, as shown below:
+
+```c++
+    int val{10};
+    double double_val{100.7};
+    
+    int *val_ptr {nullptr}; // Assigned to 0
+    
+    val_ptr = &val; // Points pointer to memory address of val
+    cout << "Value of val is: " << val << endl; // Prints 10
+    cout << "Address of val is: " << &val << endl; // Prints memory address of val e.g. 0x61fe0c
+    cout << "Value of val_ptr is: " << val_ptr << endl; // Prints same address as above e.g. 0x61fe0c
+
+    score_ptr = &high_temp;     // Compiler error is datatype doesn't match
+```
+
+#### Dereferencing Pointers
+
+Dereferencing is the term used to get the value stored at the memory address of a pointer. 
+This is done with the dereference operator '\*', enabling the value of the variable to be changed either by the pointer or by the variable itself.
+An example is show below:
+
+```c++
+ int val {100};
+    int *val_ptr {&val};
+
+    cout << *val_ptr << endl;		// 100
+
+    *val = 200;
+    
+    cout << *val_ptr << endl;		// 200
+    cout << val << endl; 			// 200
+```
+
+#### Dynamic Memory Allocation
+
+#### Pointers & Arrays
+
+#### Pointer Arithmetic
+
+#### Const Pointers
+
+#### Passing Pointers To Functions
+
+#### Returning Pointers From Functions
+
+#### References
+
+### Section 7 Challenge
+
