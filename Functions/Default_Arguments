@@ -1,0 +1,20 @@
+#include <iostream>
+
+using std::cout;
+using std::cin;
+using std::endl;
+
+void print_shopping_list(int apples = 3, int oranges = 7, int mangos = 13);
+
+int main(){
+    
+    print_shopping_list(); // Prints 3 apples, 7 oranges & 13 mangos
+    print_shopping_list(5); // Prints 5 apples , 7 orages & 13 mangos
+    print_shopping_list(7,11); // Prints 7 apples, 11  orages & 13 mangos
+    return 0;
+}
+
+void print_shopping_list(int apples, int oranges, int mangos){
+    cout << apples << " apples" << "\n" << oranges << " oranges" << "\n" << mangos << " mangos" << "\n";
+    cout << "======================================" << endl;
+}
