@@ -1475,6 +1475,27 @@ In summary, it is important to delete a pointer when it is no longer needed.
 
 #### Pointers & Arrays
 
+The value of an array is the address of the first element. Similarly, the value of a pointer is an address.
+Therefore if a pointer is of the same datatype as the array and points to it. Then the pointer and the array name can be used interchangeably.
+
+Here is an example using an array as a pointer:
+
+```c++
+
+int values [] {1,2,3}; // Declare an array of three elements
+
+cout << values << endl; // Prints out address of first element e.g 0x6ffe14
+cout << *values << endl; // Prints out element at first address '1'
+
+int *val_ptr{values};
+
+cout << val_ptr << endl; // Prints out same address as 'values' e.g 0x6ffe14
+cout << *val_ptr << endl; // prints out same element '1'
+```
+
+
+
+
 #### Pointer Arithmetic
 
 #### Const Pointers
