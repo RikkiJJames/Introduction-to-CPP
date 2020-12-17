@@ -1251,9 +1251,9 @@ Uninitialised pointers that aren't set to hold a value can be pointing to any me
 A **null pointer** is the equivalent to initialising a variable to zero. A pointer can be initialised to null via the syntax shown below:
 
 ```c++
-int *int_ptr{null_ptr};
-char *char_ptr{null_ptr};
-string *string_ptr{null_ptr};
+int *int_ptr{nullptr};
+char *char_ptr{nullptr};
+string *string_ptr{nullptr};
 ```
 
 ##### Pointer Size
@@ -1261,9 +1261,9 @@ string *string_ptr{null_ptr};
 The size of a pointer isn't defined by the datatype it points towards. All pointers in a program are the same size:
 
 ```c++
-int *int_ptr{null_ptr};
-char *char_ptr{null_ptr};
-string *string_ptr{null_ptr};
+int *int_ptr{nullptr};
+char *char_ptr{nullptr};
+string *string_ptr{nullptr};
 
 cout << "sizeof of int_ptr is: " << sizeof int_ptr << endl; // 8 bits
 cout << "sizeof of char_ptr is: " << sizeof char_ptr << endl; // 8 bits
@@ -1332,7 +1332,146 @@ An example is show below:
     cout << val << endl; 			// 200
 ```
 
+#### Memory
+
+The memory that a program uses typically uses can be divided into areas:
+
+* Code Segment - This is where the compiled program sits in memory. This segment is typically read-only.
+* Call Stack - Where function parameters, local variables, and other function-related information is stored.
+* Heap - where dynamically allocated variables are allocated from
+
+##### Call Stack
+
+The call stack  supports the creation, maintenance and destruction of each called function's automatic variables in a last in first out (LIFO) behavior.
+Therefore the first function called, is the last function to be popped from the stack. Whereas the last function called is the first to be popped of the stack.
+
+##### The Heap
+
+The heap has advantages and disadvantages:
+* Allocating memory on the heap is slower than allocating memory on the stack.
+* Allocated memory stays allocated until it is specifically deallocated (beware memory leaks) or the application ends (at which point the OS should clean it up).
+* Dynamically allocated memory must be accessed through a pointer. Dereferencing a pointer is slower than accessing a variable directly.
+* Because the heap is a big pool of memory, large arrays, structures, or classes can be allocated here.
+
 #### Dynamic Memory Allocation
+
+In the previous sections all memory allocated has been **static** and were determined at compile time residing in the call stack.
+However, there are cases when you only know how much memory to allocate during runtime, such as depending on user input. 
+On these cases, programs need to dynamically allocate memory which does not come from the program’s limited stack memory.
+Instead, it is allocated from a much larger pool of memory managed by the operating system called the heap. On modern machines, the heap can be gigabytes in size.
+
+##### Creating Dynamic Variables
+Dynamic memory is allocated using 'new' keyword followed by the datatype of the variable you wish to create. If more than one variable of the same type is to be created the '[]' operator can be used.
+The 'new' keyword returns pointer to the memory address of the variable. Or in the case of creating multiple variables, creates a pointer pointing the memory address of the first element.
+An example can be seen below:
+
+```c++
+// Allocating single values
+    int *int_ptr1 {new int}; // Allocate int on the heap
+    *int_ptr1 = 7;
+    cout << *int_ptr << endl; // Prints out 7, the value of the integer on the heap 
+    
+    int *int_ptr2 {new int{7}}; // Allocates int on the heap and sets it to 7
+    cout << *int_ptr << endl; // Prints out 7, the value of the integer on the heap
+    
+ // Allocating multiple values   
+    int size{0};
+    int *value_ptr {nullptr};
+    
+    cout << "How many values? ";
+    cin >> size;
+    
+    value_ptr = new int[size];    // Allocate the storage on the heap equal to the number the user entered
+    cout << value_ptr << endl;       // Memory address of the first value
+```
+
+When the dynamically allocated variable is no longer needed, C++ must be told explicitly to free the memory for reuse. For single variables, this is done via 'delete' operator.
+
+The delete operator does not actually delete anything. It simply returns the memory being pointed to back to the operating system. The operating system is then free to reassign that memory. Although it looks like the variable is being deleted this is not actually the case. The pointer variable still has the same scope as before, and can be assigned a new value just like any other variable.
+Using the previous example:
+
+```c++
+    int *int_ptr {new int{7}}; // Allocate int on the heap
+    cout << int_ptr << endl; // Prints out memory address e.g 0x1e18b0
+    delete int_ptr; // Release memory
+    
+    int_ptr = new int; // Pointer can be reallocated with no issue
+    cout << int_ptr << endl; // prints out memory address does not necessarily have to be the same address as before
+    delete int_ptr; // Release memory again
+```
+
+**Note that deleting a pointer that is not pointing to dynamically allocated memory may cause bad things to happen.**
+
+A pointer that is pointing to deallocated memory is called a dangling pointer. dereferencing or deleting a dangling pointer will lead to undefined behavior. Consider the following program:
+
+```c++
+    int *ptr{ new int }; // dynamically allocate an integer
+    *ptr = 7; // put 7 in that memory location
+ 
+    delete ptr; // return the memory to the operating system.  ptr is now a dangling pointer.
+ 
+    std::cout << *ptr; // dereferencing deallocated dangling pointer will cause undefined behavior
+    delete ptr; // trying to deallocate the memory again will also lead to undefined behavior.
+```
+There are cases where deallocating memory can produce multiple dangling pointers:
+
+```c++
+#include <iostream>
+ 
+int main()
+{
+    int *ptr{ new int{} }; // dynamically allocate an integer
+    int *otherPtr{ ptr }; // otherPtr is now pointed at that same memory location
+ 
+    delete ptr; // return the memory to the operating system.  ptr and otherPtr are now dangling pointers.
+    ptr = nullptr; // ptr is now a nullptr
+ 
+    // however, otherPtr is still a dangling pointer!
+ 
+    return 0;
+}
+```
+
+There are a few best practices to prevent dangling pointers
+
+Firstly, it is best to avoid having multiple pointers point at the same piece of dynamic memory. If this is not avoidable, it is best to be clear about which pointer “owns” the memory (and is responsible for deleting it) and which are just accessing it. How to do this will be discussed later
+
+Second, a pointer is deleted, if that pointer is not going out of scope immediately, set the pointer to nullptr.
+
+##### Memory Leaks
+
+Dynamically allocated memory stays allocated until it is explicitly deallocated or until the program ends (Assuming your operating system does that). However, the pointers used to hold dynamically allocated memory addresses follow the normal scoping rules for local variables and will be destroyed when out of scope.
+
+An example is shown below:
+
+```c++
+void function()
+{
+    int *ptr{ new int{} };
+}
+```
+In this function an integer is allocated memory dynamically, but never frees it using delete. Because pointers variables are just normal variables, when the function ends the pointer will be delete. Because 'ptr' is the only variable holding the address of the dynamically allocated variable, there are ways to access the dynamically allocated memory. As a result, this dynamically allocated integer can not be deleted. This is called a **memory leak**.
+
+Memory leaks happen when your program loses the address of some bit of dynamically allocated memory before giving it back to the operating system. When this happens, your program can’t delete the dynamically allocated memory, because it no longer knows where it is. The operating system also can’t use this memory, because that memory is considered to be still in use by your program.
+
+Although forgetting to delete a pointer can cause a memory leak. There are other ways to achieve it:
+
+```c++
+int value = 5;
+int *ptr{ new int{5} }; // Allocates memory dynamically
+ptr = &value; // Address of new int lost - memory leak
+```
+
+This can be rectified by deleting the ptr before reusing, telling the OS that the memory address can be used.
+
+```c++
+int value{ 5 };
+int *ptr{ new int{} }; // Allocates memory dynamically
+delete ptr; // deallocates memory memory back to OS
+ptr = &value; // reassign pointer to address of value
+```
+
+In summary, it is important to delete a pointer when it is no longer needed.
 
 #### Pointers & Arrays
 
