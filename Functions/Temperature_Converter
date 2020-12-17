@@ -1,0 +1,36 @@
+// Converts Celsius into Fahrenheit and Kevlin
+
+#include <iostream>
+#include <cmath>
+
+using std::cout;
+using std::cin;
+using std::endl;
+
+
+double celsius_to_fahrenheit(double celsius_temperature);
+double celsius_to_kelvin(double celsius_temperature);
+
+int main(){
+    
+    double celsius_temperature {}, kelvin_temperature {}, fahrenheit_temperature {};
+    
+    cout << "What is the temperature in celsius: ";
+    cin>>celsius_temperature;
+    
+    kelvin_temperature = celsius_to_kelvin(celsius_temperature);
+    fahrenheit_temperature = celsius_to_fahrenheit(celsius_temperature);
+    
+    cout << "The celsius temperature " << celsius_temperature
+         << " degrees is equivalent to " << fahrenheit_temperature
+         << " degrees fahrenheit and " << kelvin_temperature << " degrees kelvin" << endl;
+    return 0;
+}
+
+double celsius_to_fahrenheit(double celsius_temperature){   
+    return round((celsius_temperature * (9.0/5.0)) + 32.0);     
+    }
+    
+double celsius_to_kelvin(double celsius_temperature){
+    return celsius_temperature - 273.15;
+}
