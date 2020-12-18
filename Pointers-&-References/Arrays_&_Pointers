@@ -1,0 +1,39 @@
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+int main() {
+    
+    int values[] {1, 10, 100};
+    
+    cout << "Value of scores: " << values << endl; // Memory Address e.g 0x61fe0c     
+    
+    int *val_ptr {values};
+    cout << "  Value of score_ptr: " << val_ptr << endl; // Same memory address as 'values' e.g 0x61fe0c
+    
+    cout << "\nArray subscript notation -------------------------" << endl;
+    cout << values[0] << endl; // Prints 1
+    cout << values[1] << endl; // Prints 10
+    cout << values[2] << endl; // Prints 100
+    
+    cout << "\nPointer subscript notation -------------------------" << endl;
+    cout << val_ptr[0] << endl; // Prints 1
+    cout << val_ptr[1] << endl; // Prints 10
+    cout << val_ptr[2] << endl; // Prints 100
+    
+    cout << "\nPointer offset notation-------------------------" << endl;
+    cout << *val_ptr << endl; // Prints 1
+    cout << *(val_ptr + 1) << endl; // Prints 10
+    cout << *(val_ptr +2) << endl; // Prints 100
+    
+    cout << "\nArray offset notation-------------------------" << endl;
+    cout << *values << endl; // Prints 1
+    cout << *(values + 1) << endl; // Prints 10
+    cout << *(values +2) << endl; // Prints 100
+    
+    cout << endl;
+    
+    return 0;
+}
+
