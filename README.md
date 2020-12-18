@@ -56,7 +56,19 @@
    * [Recursive Functions](#recursive-functions)
    * [Section 6 Challenge](#section-6-challenge)
  * [Section 7 - Pointers & References](#section-7---pointers--references)
- * OOP - Classes & Objects
+   * [Pointers](#pointers)
+     * [Declaring Pointers](#declaring-pointers)
+     * [Assigning Pointers](#assigning-pointers)
+     * [Dereferencing Pointers](#dereferencing-pointers)
+     * [Memory](#memory)
+     * [Pointers & Arrays](#pointers--arrays)
+     * [Pointer Arithmetic](#pointer-arithmetic)
+     * [Const Pointers](#const-pointers)
+     * [Passing Pointers To Functions](#passing-pointers-to-functions)
+     * [Returning Pointers From Functions](#returning-pointers-from-functions)
+   * [References](#references)
+   * [Section 7 Challenge](#section-7-challenge)
+ * [Section 8 - OOP (Classes & Objects)](#section-8---oop-classes--objects)
  * Operator Overloading
  * Inheritance
  * Polymorphism
@@ -1487,24 +1499,262 @@ int values [] {1,2,3}; // Declare an array of three elements
 cout << values << endl; // Prints out address of first element e.g 0x6ffe14
 cout << *values << endl; // Prints out element at first address '1'
 
-int *val_ptr{values};
+int *val_ptr {values};
 
 cout << val_ptr << endl; // Prints out same address as 'values' e.g 0x6ffe14
 cout << *val_ptr << endl; // prints out same element '1'
 ```
 
+As they are essentially interchangable the elements in an array can be accessed with subscript notation, either through the pointer or the array name as shown below:
 
+```c++
 
+int values [] {1,2,3}; // Declare an array of three elements
+int *val_ptr {values};
+
+cout << "\nArray subscript notation -------------------------" << endl;
+    cout << values[0] << endl;
+    cout << values[1] << endl;
+    cout << values[2] << endl;
+    
+    cout << "\nPointer subscript notation -------------------------" << endl;
+    cout << val_ptr[0] << endl;
+    cout << val_ptr[1] << endl;
+    cout << val_ptr[2] << endl;
+```
+More examples can be found [here](Pointers-&-References/Arrays_&_Pointers)
 
 #### Pointer Arithmetic
 
+In C++ pointers can also be used in arithmetic and comparison expressions. However they can only be done on a raw array.
+
+##### Arithmetic Expressions
+
+A limited set of arithmetic operations can be performed on pointers. A pointer may be:
+
+* Incremented - Points to the next element in an array '++'
+* Decremented - Points to the previous element in an array '—'
+* Addition - Increments the integer by the size of the datatype of the pointer '+ or +='
+* Subtraction - Decrements the integer by the size of the datatype of the pointer '– or -='
+
+An example can be seen below:
+
+```c++
+// Incrementation
+    int values[] {100, 95, 89, 68, -1};
+    int *val_ptr {scores};
+    
+    while (*val_ptr != -1) { 
+        cout << *val_ptr << endl; // Prints out 'values' until it reaches '-1' {100,95,89,68}
+        val_ptr++; // Increments the address of the pointer by the size of an integer
+    }
+    
+    // The example above could also be written as
+    cout << "\n-------------------------" << endl;
+    score_ptr = scores;
+    while (*score_ptr != -1){
+        cout << *score_ptr++ << endl; // Same as *(score_ptr++)
+    }
+
+// Addition
+
+    while (*score_ptr != -1) {
+        cout << *score_ptr << endl; // Prints out values until it reaches '-1' {100,89}
+        score_ptr += 2; // Increments the pointer by the size of two integers
+    }
+````
+
+###### Subtracting Pointers
+
+Pointers can also be subtracted from each other provided they point to the same dataset. This gives the number of elements between the two pointers as shown below:
+
+```c++
+    char name[]  {"Rikki"};
+    
+    char *char_ptr1 {nullptr};
+    char *char_ptr2{nullptr};
+    
+    char_ptr1 = &name[0];   // R
+    char_ptr2 = &name[3];   // K
+
+    cout << "In the string " << name << ",  " 
+         << *char_ptr2 << " is " << (char_ptr2 - char_ptr1) 
+         << " characters away from " <<  *char_ptr1  << endl;  // Prints that K is '3' characters away from R
+```
+##### Comparison Expressions
+
+The equality operator '==' can be used to compare two pointers. However, this refers to the memory locations of the two pointers and not the values that the pointers reference. An example can be seen below:
+
+```c++
+    string s1 {"Rikki"};
+    string s2 {"Rikki"};
+    string s3 {"James"};
+
+    string *p1 {&s1};		
+    string *p2 {&s2}; // Different memory address as 'p1' but pointer references the same value
+    string *p3 {&s1}; // Same memory address as 'p1'
+
+    cout << p1 << "==" << p2 << ": " << (p1 == p2) << endl;		// Prints false
+    cout << p1 << "==" << p3 << ": " << (p1 == p3) << endl;		// Prints true
+```
+
+The pointers must be dereferences in order to compare their values:
+
+```c++
+    string s1 {"Rikki"};
+    string s2 {"Rikki"};
+    string s3 {"James"};
+
+    string *p1 {&s1};		
+    string *p2 {&s2}; // Different memory address as 'p1' but pointer references the same value
+    string *p3 {&s1}; // Same memory address as 'p1'
+
+    cout << *p1 << "==" << *p2 << ": " << (*p1 == *p2) << endl;		// true
+    cout << *p1 << "==" << *p3 << ": " << (*p1 == *p3) << endl;		// true
+```
+
 #### Const Pointers
+
+The are multiple ways to use the 'const' keyword with pointers to make them read-only. In the example below, the data the pointer points to is constant and cannot be changed. However, the value of the pointer (address) can be changed.
+
+```c++
+int high_num {70};
+int low_num {25};
+
+const int *num_ptr {&high_num};
+
+*num_ptr = 95; // Compiler error, value is read-only
+num_ptr = &low_num; // Works fine
+```
+
+In the next example the data the pointer points to can by changed, but the address referenced by the pointer cannot change.
+
+```c++
+int high_num {70};
+int low_num {25};
+
+int const *num_ptr {&high_num};
+
+*num_ptr = 95; // Works fine
+num_ptr = &low_num; // Compiler error, value is read-only
+```
+
+Finally, in this example neither the data the pointer points to nor the address the pointer references can be changed.
+```c++
+int high_num {70};
+int low_num {25};
+
+const int const *num_ptr {&high_num};
+
+*num_ptr = 95; // Compiler error, value is read-only
+num_ptr = &low_num; // Compiler error, value is read-only
+```
 
 #### Passing Pointers To Functions
 
+Pointers can also be used to pass by reference. The example below is used to double the value of the data passed in. The first asterix is used to dereference the pointer, while the second is used to multiply.
+
+```c++
+    void double_data(int *int_ptr) {
+   *int_ptr *= 2;	
+}
+
+int main() {
+    int value {10};
+    int *int_ptr {nullptr};
+    
+    cout << "Value: " << value << endl; // Prints 10
+    double_data(&value);
+    cout << "Value: " << value << endl; // Prints 20
+```
+More examples on passing pointers into functions can be found [here](Pointers-&-References/Passing_Pointers_1) and [here](Pointers-&-References/Passing_Pointers_2)
+
 #### Returning Pointers From Functions
+
+In C++ functions can also return pointers by specifying the pointer type in the function declaration.
+
+An example can be seen below:
+
+```c++
+
+int *largest_int (int *ptr1, int *ptr2){
+    if (*ptr1 > *ptr2)
+        return ptr1;
+    else
+        return ptr2;
+}
+
+int main(){
+
+int a {10};
+int b {20};
+
+int *largest_ptr {nullptr};
+
+largest_ptr = largest_int(&a, &b); // Sets the address of largest pointer to the memory location of 'b'.
+cout<< *largest_ptr << endl; // Prints 200
+
+return 0;
+}
+```
+This can also be uses in conjunction with dynamic memory allocation. The  example [here](Pointers-&-References/Returning_Pointers) shows how to allocate memory dynamically within a function and returns its address.
+
+Pointers pointing to local variables in a function should never be returned as they are deleting once out of scope. Here is an example of what not to do.
+
+```c++
+int *avoid_this(){
+
+    int num {};
+    
+    return &num;
+```
+
+```c++
+int *avoid_this_too(){
+
+    int num {};
+    int *num_ptr {&num};
+    return num_ptr;
+```
 
 #### References
 
+A reference is an alias for a variable, meaning itbecomes an alternative name for an existing variable. A variable can be declared as a reference by putting ‘&’ in the declaration. A benefit of using a reference if the variable is passed without reference, a new copy of it is created which causes wastage of CPU time and memory.
+
+There are a few points that differentiate a pointer from a reference:
+
+* A reference must be initialised to a variable when declared
+* A reference cannot be nuk
+* Once initialised it cannot be used to refer to another variable
+
+Here is an example of a range based for loop that doesn't use references, during the loop a copy is made and therefore the original vector remains unchanged:
+
+```c++
+vector <string> colours {"Red", "Yellow" , "Blue"};
+
+for (auto col : colours)
+    col = "Purple"; // Only changes a copy of the vector
+    
+for (auto col : colours)
+    cout << col << endl; // Prints "Red Yellow Blue"
+```
+
+To actually make changes in the vector, a reference can be used as shown below:
+
+```c++
+vector <string> colours {"Red", "Yellow" , "Blue"};
+
+for (auto &col : colours)
+    col = "Purple"; // Changes the actual values
+    
+for (auto const &col : colours)
+    cout << col << endl; // Prints "Purple Purple Purple"
+```
+More examples on references can be found [here](Pointers-&-References/References)
+
 ### Section 7 Challenge
 
+This challenge contains a function that two arrays of integers and their sizes and dynamically allocates a new array of integers whose size is the product of the 2 arrays.
+The function also loops through the first and second arrays and multiplies each element, storing the product in the newly created array and returning a pointer to the newly allocated array. The challenge can be found [here](Pointers-&-References/Challenge)
+
+### Section 8 - OOP (Classes & Objects)
