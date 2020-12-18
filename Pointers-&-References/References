@@ -1,0 +1,46 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
+
+int main() {
+    
+    int num {100};
+    int &ref {num};
+    
+    cout << num << endl;
+    cout << ref << endl;
+    
+    num  = 200;
+    cout << "\n---------------------------------" << endl;
+    cout << num << endl;
+    cout << ref << endl;
+    
+    ref = 300;
+    cout << "\n---------------------------------" << endl;
+    cout << num << endl;
+    cout << ref << endl;
+    
+    cout << "\n---------------------------------" << endl;
+    vector<string> colour {"Red", "Yellow", "Blue"};
+
+    for (auto col: colour)     
+        col = "Funny";              // col is a COPY of the each vector element
+      
+    for (auto col: colour)        // No change
+        cout << col << endl;
+ 
+    cout << "\n---------------------------------" << endl;
+    for (auto &col: colour)  // col is a reference to each vector element
+        col = "Funny";
+     
+    for (auto const &col:colour)   // notice we are using const
+        cout << col << endl;            // now the vector elements have changed
+    
+    cout << endl;
+    return 0;
+}
