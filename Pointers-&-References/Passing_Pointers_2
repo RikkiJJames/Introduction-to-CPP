@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using std::string;
+using std::vector;
+using std::cout;
+using std::endl;
+
+// Display functions are overloaded
+
+void display( const vector<string> *const  v) { // Neither the value of the elements nor address of the pointer can be changed
+// (*v).at(0) = "Purple"; // Compiler error
+    for (auto str: *v)
+        cout << str << " "; // Prints out "Red Yellow Blue
+    cout << endl;
+  
+// v = nullptr; // Compiler Error
+}
+
+
+void display(int *array, int terminator) { // Prints until element is equal to terminator
+    while (*array != terminator)
+        cout << *array++ << " ";
+    cout << endl;
+}
+
+int main() {
+
+    cout << "-----------------------------" << endl;
+    vector<string> colours {"Red", "Yellow", "Blue"};
+    display(&colours);
+   
+    cout << "\n-----------------------------" << endl;
+    int scores[] {100,97,85,72,77,-1};
+    display(scores, -1);
+    
+    cout  << endl;
+    return 0;
+}
