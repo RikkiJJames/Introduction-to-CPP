@@ -1775,7 +1775,7 @@ The building block of C++ that leads to Object-Oriented programming is a 'class'
 For example: in real life, a car is an object. The car has attributes, such as weight and color, and methods, such as drive and brake.
 Attributes and methods are basically variables/data and functions that belongs to the class. These are often referred to as "class members".
 
-### Creating Classes
+### Classes
 
 The syntax to create a class in C++ uses the 'class' keyword as shown below:
 
@@ -1893,4 +1893,215 @@ Trying to directly access a private access member results in a compiler error
 #### Implementing Member Methods
 
 Implimenting member methods is very similar to implementing functions. Also, as methods have access to member attributes, they do not need to be passed in arguments.
+
+Member methods can be written inside or outside of the class declaration. If written inside, they are implicitly inline which speeds up the program. Although this is fine when the method is small, larger methods are best implemented outside of the class declaration. To do this the scope resolution operator '::' needs to be used as shown below:
+
+```c++
+Class_name::method_name
+```
+The implementation and delaration are normally stored seperately, to make it easier to manage. The declaration is stored in an include file/header file with the '.h' extension. While the implementation is in a '.cpp' file.
+
+An example of class declaration and implementation being done together is shown below:
+
+```c++
+class Account{
+private:
+    double balance;
+public:
+    void set_balance(double bal){
+        balance = bal;
+    }
+    double get_balance(){
+        return balance;
+    }
+};
+```
+
+To implement the methods outside of the class declaration the scope resolution operator is used '::'.
+
+```c++
+// Account.h file
+#pragma once // Ensures file is only included by only one cpp file 
+class Account{
+private:
+    double balance;
+public:
+    void set_balance(double bal);
+    double get_balange();
+};
+
+// Account.cpp file
+#include "Account.h"
+
+void Account::set_balance(double bal){
+        balance = bal;
+}
+
+double Account::get_balance(){
+        return balance;
+}
+
+
+// Main.cpp
+
+#include <iostream>
+#include "Account.h"
+
+using namespace std;
+
+int main(){
+
+Account rikki_account;
+rikki_account.set_balance(1000.00);
+double bal = rikki_account.get_balance();
+
+cout << bal << endl // Prints '1000'
+return 0;
+}
+```
+
+Some more examples of implementing class methods can be found [here](OOP/Implementing_Methods)
+
+### Constructors and Destructors
+
+#### Constructors
+
+Constructors are special member methods that are invoked during object creation that have the same name as the class, are useful for initialisation and can be overloaded. An example can be seen below:
+
+```c++
+
+class Player{
+
+private:
+    std::string name;
+    int health;
+    in xp;
+public:
+// Overloaded Constructors
+    Player();
+    Player(std::string name);
+    Player(std::string name, int health, int xp);
+}; 
+```
+
+##### Overloading Constructors
+
+Classes can have as many constructors as necessary. However, each must have its own unique signature so the compliler knows which one to use. A example is shown below:
+
+```c++
+Player::Player(){
+    name = "None";
+    health = 0;
+    xp = 0;
+}
+
+Player::Player(std::string name_val){
+    name = name_val;
+    health = 0;
+    xp = 0;
+}
+```
+
+##### Initialisation Lists
+
+Constructor initialisation lists are more efficient and initialises data members as soon as the object is created. An example is shown below:
+
+```c++
+
+// Previous method
+
+Player::Player(){
+    name = "None"; // assignment not initialisation
+    health = 0;
+    xp = 0;
+}
+
+// Better method
+Player::Player()
+    :name{"None"}, health {0}, xp {0} {
+}
+```
+
+##### Delegating Constructors
+
+The code for various constructors is often very similar and duplicated code often leads to errors. C++ allows deligating which allows one constructor to call another in the **initialisation** list. The sytanx is as follows:
+
+```c++
+Player::Player(std::string, int health_val, int xp_val)
+    :name{name_val}, health {health_val}, xp {xp_val} {
+}
+
+Player::Player()
+    :Player{"None",0,0}{ // Calls three args constructor with data needed
+}
+
+Player::Player(std::string name_val)
+    :Player{name_val,0,0}{ // Calls three args constructor with data needed
+}
+```
+
+##### Default Constructor
+
+A default constructor also known as the 'no-args constructor' doesn't expect any arguments. If a no-args constructor has not been written then C++ will automatically generate one. However, a default constructor is no longer automatically generated once another constructor has been declared. It is best practice to define a default constructor otherwise the parameters will contain garbage data.
+
+An example can be seen [here](OOP/Default_Constructors)
+
+##### Default Constructor Parameters
+
+Default value can also be used for class constructor and methods, often reducing the number of overloaded constructors needed. The three constructors shown in 'delegating constructors' example can be replaced by a single constructor, an example is shown below:
+
+```c++
+
+Player::Player(std::string = "None", int health_val = 0, int xp_val = 0){
+ : name{name_val}, health{health_val}, xp{xp_val} {
+}
+```
+
+#### Copy Constructors
+
+
+
+##### Destructors
+
+Destructors also special member methods that have the same name as the class. However, descructors have a tilde '~' proceding their name. They are automatically invoked when an object is destroyed and only one is allowed per class. Therefore they cannot be overloaded, they are useful to release memory and other resources.
+
+An example can be seen below:
+
+```c++
+
+class Player{
+
+private:
+    std::string name;
+    int health;
+    in xp;
+public:
+// Overloaded Constructors
+    Player();
+    Player(std::string name);
+    Player(std::string name, int health, int xp);
+// Destructor
+~Player();
+}; 
+```
+
+Therefore objects can be created using the example below:
+
+```c++
+
+Player rikki; // 0 arg constructor called
+
+
+Player jocelyn("Jocelyn"); // 1 arg constructor called
+
+Player james ("James",100,10); 
+
+// After the objects are used and go out of scope - 3 destructors are called
+
+// Constructors and Descructors can also be used with pointers and dynamic memory allocation
+
+Player *enemy = new Player("Boss",1000,0); // 3 arg constructor called
+delete enemy; // Destructor called
+```
+
 
