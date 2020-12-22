@@ -1758,3 +1758,139 @@ This challenge contains a function that two arrays of integers and their sizes a
 The function also loops through the first and second arrays and multiplies each element, storing the product in the newly created array and returning a pointer to the newly allocated array. The challenge can be found [here](Pointers-&-References/Challenge)
 
 ### Section 8 - OOP (Classes & Objects)
+
+OOP stands for Object-Oriented Programming.
+
+Procedural programming is what has been covered until now; writing procedures or functions that perform operations on the data. However, object-oriented programming is about creating objects that contain both attributes and methods.
+
+Object-oriented programming has several advantages over procedural programming:
+
+* OOP is faster and easier to execute
+* OOP provides a clear structure for the programs
+* OOP helps to prevent code repition and makes the code easier to maintain, modify and debug
+* OOP makes it possible to create full reusable applications with less code and shorter development time
+
+The building block of C++ that leads to Object-Oriented programming is a 'class'. It is a user-defined data type that works as an object constructor, holding its own attributes and methods, accessible and useable by creating an instance of that class. A class is like a blueprint for an object and when an object is created, it inherits all the variables and functions from the class.
+
+For example: in real life, a car is an object. The car has attributes, such as weight and color, and methods, such as drive and brake.
+Attributes and methods are basically variables/data and functions that belongs to the class. These are often referred to as "class members".
+
+### Creating Classes
+
+The syntax to create a class in C++ uses the 'class' keyword as shown below:
+
+```c++
+class Class_Name{
+
+// delaration(s)
+
+};
+```
+An example of a class can be seen below:
+
+```c++
+class Player{
+
+// attributes
+
+    std::string name;
+    int health;
+    int xp;
+
+// methods
+
+    void talk (std::string text){
+         cout << name << " says " << text << endl;
+    }
+    bool is dead();
+};
+```
+Once the class has been created, objects can be created using instances of that class.
+
+#### Creating Objects
+
+An object can be created using the regular method to create primitive datatypes
+
+```c++
+// Creating Instance of Player Class
+Player hero;
+
+// Creating Player Object on the heap
+Player *enemy = new Player();
+delete enemy;
+```
+
+#### Accessing Class Members
+
+There are two ways to access class attributes and methods, either through the '.' operator or the '->' operator. Some class members may not be accessible since they can be hidden.
+
+The example below shows how to access class members using the '.' and the '->' operator:
+
+```c++
+//
+Player rikki
+rikki.name = "Rikki";
+rikki.health = 0;
+rikki.xp = 12;
+rikki.talk("Hi there"); // Prints "Rikki says Hi there"
+
+Player *enemy = new Player;
+// Pointer must be dereferenced before the member can be called
+(*enemy).name = "Enemy";
+(*enemy).health = 100;
+
+// or the '->' operator can be used
+enemy->xp = 15;
+enemy->talk("Prepare to Meet Your Maker!");
+delete enemy;
+```
+Another example on creating classes can be found [here](OOP/Accessing_Class_Members)
+
+#### Class Access Specifier
+
+C++ has three basic class member access specifiers:
+
+* public - accessible everywhere
+* private - only accessible by members or friends of the class
+* protected - used with inheritance which will be covered later
+
+They are declared in the body of the class and everything declared underneath the specified access modifier will have that access modifier applied to it. The syntax can be seen below:
+
+```c++
+
+class Class_Name
+{
+public:
+// delarations
+
+// Private is the default if no access modifier is specified
+private:
+// declarations
+
+protected:
+// declarations
+};
+```
+An example of using the public and private specifiers are shown below:
+
+```c++
+class Player{
+
+// Only accessible from other members and from friends of the class
+private:
+std::string name;
+int health;
+int xp;
+// Accessible anywhere
+public:
+void talk(std:: string text);
+bool is_dead();
+};
+```
+
+Trying to directly access a private access member results in a compiler error 
+
+#### Implementing Member Methods
+
+Implimenting member methods is very similar to implementing functions. Also, as methods have access to member attributes, they do not need to be passed in arguments.
+
