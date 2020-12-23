@@ -2059,9 +2059,314 @@ Player::Player(std::string = "None", int health_val = 0, int xp_val = 0){
 
 #### Copy Constructors
 
+When objects are copied, C++ must create an new object from an existing object. A copy is made due to the reasons below:
+
+* Passing an object by value as a parameter
+* Returning an object from a function by value
+* Constructing one object based on another of the same class
+
+An example of the passing by value use case can be seen below:
+
+```c++
+Player rikki {"Rikki",100,20};
+
+void display_player(Player p){
+// p is a copy of 'rikki' in this example
+// p will be used
+// A destructor will be called for p
+}
+```
+
+An example of returning an object by value can be seen below:
+
+```c++
+
+Player enemy;
+
+Player create_boss(){
+    Player boss{"Boss",1000,1000};
+    return boss; // A copy of boss is returned
+}
+
+enemy = create_boss();
+```
+
+Finally the use case example of constructing one object based on another can be seen below:
+
+```c++
+Player hero{"Hero",100,100};
+
+Player another_hero {hero}; // A copy of hero is made
+```
+
+Copy constructors can be user defined or the C++ compiler will create a compiler generate a default one which does memberwise copy. Copying the attributes from the source object to the copy object, if a attribute is an object, then it's copy constructor will be called. This is fine for most use cases. However, if raw pointers are used then only the pointer will be copied - not what it's pointing to. This is referred to a shallow copy as opposed to a deep constructor
+
+Below are a list of best practices:
+
+* Always provide a copy constructor if the class has a raw pointer
+* Provide the copy constructor with a const reference parameter
+* Use STL classes as they already provide copy constructors
+* Avoid using raw pointer data members if possible
+
+##### Declaring Copy Constructors
+
+The syntax for copy constructors can be seen below:
+
+```c++
+
+Player::Player(const Player &source);
+Account::Account(const Account &source);
+````
+The syntax can be a bit confusing, but makes sense when you break it down.
+Its a constructor, so it has the same name as the class, and in the parameter list is a single object passed in of the same type. It is passed in as a reference and constant. If it wasn't passed in by reference, then a copy would have to be made - which is the whole point of the copy constructor, this would defeat the purpose and end up with infinite recursive calls. The constant prevents any modification for the original object.
+
+##### Implementing the Copy Constructor
+
+The body of the copy constructor contains anything that is needed to initialise the new object. All members of it can be accessed as 'source' is an input. Initialisation lists can be used instead of assignment as shown below:
 
 
-##### Destructors
+```c++
+Player::Player (const Player &source)
+: name {source.name}, health {source.health}, xp {source.xp} {
+}
+
+Account::Account (const Player &source)
+: name {source.name}, balance {source.balance}{
+}
+```
+
+An example of using copy constructors can be seen [here](OOP/Copy_Constructors)
+
+##### Shallow Copying
+
+A shallow copy is the default behaviour provided by the compiler generated copy constructor. If the object being copied has a raw pointer, this results in the original and copy object both pointing to the same memory address in the heap. When one of those objects are destroyed and its destructor is called, the dynamicalled allocated storage is released. However, the other area still points to the same address.
+
+An example of the issues with shallow copies can be seen below:
+
+```c++
+class Shallow{
+
+private:
+    int *data; // Pointer 
+public:
+    Shallow (int d); // Constructor
+    Shallow(const Shallow &source); // Copy constructor
+};
+
+Shallow::Shallow(int d){
+data = new int; // allocate storage
+*data = d
+}
+
+Shallow::~Shallow(){
+delete data; // Free storage
+}
+
+Shallow::Shallow(const Shallow &source)
+: data(source.data) 
+// Only the pointer is copied - not what it is pointing too, 'source' and new object both point to same data area
+{
+}
+
+int main(){
+
+    Shallow obj1 {100};
+    display_shallow(obj1); // A copy of obj1 has been made, at the end of the function, the data will be released. So obj1 will be pointing to invalid memory
+```
+##### Deep Copying
+
+Deep copying creates a copy of the pointed-to data. This usually means data must be allocated and then perform the copy. You always want to perform a deep copy when using raw pointers. A example is shown below:
+
+
+```c++
+class Deep{
+
+private:
+    int *data;
+public:
+    Deep(int d);
+    Deep(const Deep &source)
+    ~Deep();
+};
+
+Deep::Deep(int d){
+   data = new int;
+   *data = d;
+}
+
+Deep::~Deep(){
+delete data; // Free storage
+}
+
+Deep::Deep(const Deep &source){
+deep = new int;
+*data = *source.data;
+// Creates new storage and copy values
+}
+
+// Delegating Constructor
+Deep::Deep(const Deep &source){
+: Deep {*source.data}{ // Delegating to constructor that expects an integer
+}
+```
+
+More examples on deep copying can be found [here](OOP/Deep_Copying)
+
+#### The 'this' Pointer
+
+'this' is a reserved keyword that contains the address of the object - so its a pointer to the object that is currently being used. However, 'this' can only be used within the scope of the class. It's uses are listed below:
+
+* Used to access data members and methods - all member access is actually done via the 'this' pointer
+* Can be used to determine if two objects are the same
+* Can be dereferenced '\*this' to yield the current object
+* Can be used to disambiguate identifiers
+
+An example to see if two objects are the same can be seen below:
+
+```c++
+
+int Account::compare_balance(const Account &other){
+    if(this == &other)
+        cout  << "These are the same objects" << endl;
+}
+```
+
+An example of using the 'this' parameter to disambiguate an identifier is shown below:
+
+```c++
+void Account::set_balance (double balance){
+    balance = balance; // Which balance? - ambiguous
+}
+
+void Account::set_balance (double balance){
+    this->balance = balance; // unambiguous
+}
+```
+#### Using const with Classes
+
+C++ can also be used to create const objects, this means their attributes cannot change. But if member functions are called on 'const' objects you'll receive a compiler error as the function may be able to change some of the objects attributes. This can be corrected by using the 'const' keyword to tell the compiler that certain methods will not change any object attributes.
+
+An example of trying to use member methods on const objects is shown below:
+
+```c++
+const Player villain {"Villain",100,55};
+void display_name(const Player &p){
+  cout << p.get_name() << endl;
+}
+
+display_name(villain); // Compiler Error - get_name could potentially change the object
+```
+An example of how to correct the error can be seen below:
+
+```c++
+
+class Player{
+
+private:
+// attributes
+public:
+   stf::string get)name () const;
+// Other methods
+};
+```
+
+More examples on const objects can be seen [here](OOP/Const_In_Classes)
+
+#### Static Class Members
+
+A C++ class can have static data members, this means that single data member belongs to the class, and not the objects. This is a useful way to store class-wide information. They are independent of any objects and can be called using the class name. An example showing how to determine the number of 'player' objects created from the 'Player' class is shown below:
+
+```c++
+class Player{
+private:
+    static int num_players;
+public:
+    static int get_num_players();
+};
+```
+
+As the function 'get_num_players()' is static, it only has access to 
+
+
+#### Friends of a Class
+
+A friend is a function or class that has access to a private class member when the function or class is not a member of the class it is accessing.
+
+* Friendship must be granted not taken
+  * Friendship must be declared explicitly in the class that is granting friendship with the keyword 'friend'
+* Friendship is not symmetric - A being a friend of B, does not make B a friend of A.
+* Friendship is not transitive - A being and friend of B, while B is a friend of C, does not make A a friend of C.
+
+The example below shows the syntax to grant friendship to a function:
+
+```c++
+class Player{
+friend void display_player(Player &p);
+std::string name;
+int health;
+int xp;
+
+public:
+// declarations
+};
+
+void display_player(Player &p){
+    cout << p.name << endl; // Can directly access class members
+    cout << p.health << endl;
+    cout << p.xp << endl;
+}
+// The function can also change private data members
+```
+The example below shows a member function of another class being granted friendship: 
+
+```c++
+class Player{
+friend void Other_class::display_player(Player &p);
+std::string name;
+int health;
+int xp;
+
+public:
+// declarations
+};
+
+class Other_class{
+public:
+void display_player(Player &p){
+    cout << p.name << endl; // Can directly access class members
+    cout << p.health << endl;
+    cout << p.xp << endl;
+}
+};
+// The function can also change private data members
+```
+
+Finally an entire class can be granted friendship, as shown below:
+
+```c++
+class Player{
+friend  Other_class; // All methods on 'Other_class' can access all attributes in 'Player' class
+std::string name;
+int health;
+int xp;
+
+public:
+// declarations
+};
+```
+#### Structs vs Class
+
+In addition to declaring a 'class', you can also declare a 'struct'. They are near identical, however, struct members are **public** by default.
+
+##### General Guidelines
+
+* Use structs for passive objects with public access - just used to hold data
+* Don't declare methods in struct
+
+* Use classes for active objects with private acess
+* Implement getters/setters as needed
+* Implemenet member methods as needed
+#### Destructors
 
 Destructors also special member methods that have the same name as the class. However, descructors have a tilde '~' proceding their name. They are automatically invoked when an object is destroyed and only one is allowed per class. Therefore they cannot be overloaded, they are useful to release memory and other resources.
 
@@ -2104,4 +2409,5 @@ Player *enemy = new Player("Boss",1000,0); // 3 arg constructor called
 delete enemy; // Destructor called
 ```
 
+### Section 8 Challenge
 
