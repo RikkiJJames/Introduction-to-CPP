@@ -1,0 +1,178 @@
+// Main.cpp
+
+#include <iostream>
+#include "Movies.h"
+
+void increment_watched(Movies &movies, std::string name) {
+    if (movies.increment_watched(name)) {
+        std::cout << name << " watch incremented" <<  std::endl;
+    } else {
+        std::cout << name << " not found" <<  std::endl;
+    }
+}
+
+void add_movie(Movies &movies, std::string name, std::string rating, int watched) {
+    if (movies.add_movie(name,rating,watched)) {
+        std::cout << name << " added" << std::endl;
+    } else {
+        std::cout << name << " already exists" <<  std::endl;
+    }
+}
+
+int main() {
+    
+    Movies my_movies;
+    
+    my_movies.display();
+    
+    add_movie(my_movies, "Shawshank Redemption", "15",1);                 // OK
+    add_movie(my_movies,"Inception", "12",5);             // OK
+    add_movie(my_movies,"Pulp Fiction", "18",1);           // OK
+     
+    my_movies.display();   // Shawshank Redemption, Inception, Pulp Fiction
+    
+    add_movie(my_movies,"Inception", "12",5);            // Already exists
+    add_movie(my_movies,"Once Upon A Time...In Hollywood", "18",2);              // OK
+ 
+    my_movies.display();    // Shawshank Redemption, Inception, Pulp Fiction, Inception
+    
+    increment_watched(my_movies,"Pulp Fiction");                    // OK
+    increment_watched(my_movies,"Inception");              // OK
+    
+    my_movies.display();    // Big and Ice Age watched count incremented by 1
+    
+    increment_watched(my_movies,"...");         // ... not found
+
+	return 0;
+}
+
+// Movie.h
+#pragma once
+
+#include <string>
+
+class Movie
+{
+private:
+    std::string name;   // Name of the movie
+    std::string rating;   // Movie rating PG, 12, 15 etc
+    int watched;          // The number of times the movie has been seen
+public:
+    // Constructor - expects all 3 movie attributes
+    Movie(std::string name, std::string rating, int watched);
+    // Copy constructor 
+    Movie(const Movie &source); 
+    // Destructor
+    ~Movie();
+    
+    // Basic getters and setters for private attributes
+    void set_name(std::string name) {this->name = name; }
+    
+    std::string get_name() const { return name; }
+    
+    void set_rating(std::string rating) {this->rating = rating; }
+    
+    std::string get_rating() const { return rating; }
+    
+    void set_watched(int watched) {this->watched = watched; }
+    
+    int get_watched() const { return watched; }
+    
+    void increment_watched() { ++watched; }
+    
+    void display() const;
+};
+
+// Movie.cpp
+
+#include <iostream>
+#include "Movie.h"
+
+// Implemention of the construcor
+
+Movie::Movie(std::string name, std::string rating, int watched) 
+    : name(name), rating(rating), watched(watched)  {
+}
+
+//Implemention of the copy constructor
+Movie::Movie(const Movie &source) 
+    : Movie{source.name, source.rating, source.watched} {
+}
+
+// Implementation of the destructor
+Movie::~Movie() {
+}
+
+// Implementation of the display method
+// should just insert the movie attributes to cout
+
+void Movie::display() const {
+    std::cout << "Name: " << name << ", " << "Rating: " << rating <<  ", " << "Times watched: " << watched  <<   std::endl;
+}
+
+// Movies.h
+
+#pragma once
+#include <vector>
+#include <string>
+#include "Movie.h"
+
+class Movies
+{
+private:
+    std::vector<Movie> movies;
+public:
+    Movies();             // Constructor
+    ~Movies();          // Destructor
+    
+
+    bool add_movie(std::string name, std::string rating, int watched);
+    
+    bool increment_watched(std::string name);
+    
+    void display() const;
+};
+
+// Movies.cpp
+
+#include <iostream>
+#include "Movies.h"
+
+
+Movies::Movies() {
+}
+
+Movies::~Movies() {
+}
+
+bool Movies::add_movie(std::string name, std::string rating, int watched) {
+    for (const Movie &movie: movies) {
+        if (movie.get_name() == name)
+            return false;
+    }
+    Movie temp {name, rating, watched};
+    movies.push_back(temp);
+    return true;
+}
+
+bool Movies::increment_watched(std::string name) {
+    for (Movie &movie: movies) {
+        if (movie.get_name() == name) {
+            movie.increment_watched();
+            return true;
+        }
+    }
+   return false;
+}
+
+
+void Movies::display() const {
+  if (movies.size() == 0) {
+        std::cout << "Sorry, no movies to display\n" << std::endl;
+    } else {
+        std::cout << "\n===================================" << std::endl;
+        for (const auto &movie: movies)
+            movie.display();
+        std::cout << "\n===================================" << std::endl;
+    }
+}
