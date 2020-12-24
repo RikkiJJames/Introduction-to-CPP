@@ -69,7 +69,21 @@
    * [References](#references)
    * [Section 7 Challenge](#section-7-challenge)
  * [Section 8 - OOP (Classes & Objects)](#section-8---oop-classes--objects)
- * Operator Overloading
+   * [Classes](#classes)
+     * [Creating Objects](#creating-objects)
+     * [Accessing Class Members](#accessing-class-members)
+     * [Class Access Specifier](#class-access-specifier)
+     * [Implementing Member Methods](#implementing-member-methods)
+   * [Constructors & Destructors](#constructors--destructors)
+     * [Constructors](#constructors)
+     * [Copy Constructors](#copy-constructors)
+     * [The 'this' Pointer](#the-this-pointer)
+     * [Using const with Classes](#using-const-with-classes)
+     * [Friends of a Class](#friends-of-a-class)
+     * [Structs vs Class](#structs-vs-class)
+     * [Destructors](#destructors)
+  * [Section 8 Challenge](#section-8-challenge)
+ * [Section 9 - Operator Overloading](#section-7---operator-overloading)
  * Inheritance
  * Polymorphism
  * Smart Pointers
@@ -1962,7 +1976,7 @@ return 0;
 
 Some more examples of implementing class methods can be found [here](OOP/Implementing_Methods)
 
-### Constructors and Destructors
+### Constructors & Destructors
 
 #### Constructors
 
@@ -2272,22 +2286,6 @@ public:
 
 More examples on const objects can be seen [here](OOP/Const_In_Classes)
 
-#### Static Class Members
-
-A C++ class can have static data members, this means that single data member belongs to the class, and not the objects. This is a useful way to store class-wide information. They are independent of any objects and can be called using the class name. An example showing how to determine the number of 'player' objects created from the 'Player' class is shown below:
-
-```c++
-class Player{
-private:
-    static int num_players;
-public:
-    static int get_num_players();
-};
-```
-
-As the function 'get_num_players()' is static, it only has access to 
-
-
 #### Friends of a Class
 
 A friend is a function or class that has access to a private class member when the function or class is not a member of the class it is accessing.
@@ -2354,6 +2352,7 @@ public:
 // declarations
 };
 ```
+
 #### Structs vs Class
 
 In addition to declaring a 'class', you can also declare a 'struct'. They are near identical, however, struct members are **public** by default.
@@ -2365,7 +2364,8 @@ In addition to declaring a 'class', you can also declare a 'struct'. They are ne
 
 * Use classes for active objects with private acess
 * Implement getters/setters as needed
-* Implemenet member methods as needed
+* Implement member methods as needed
+
 #### Destructors
 
 Destructors also special member methods that have the same name as the class. However, descructors have a tilde '~' proceding their name. They are automatically invoked when an object is destroyed and only one is allowed per class. Therefore they cannot be overloaded, they are useful to release memory and other resources.
@@ -2410,4 +2410,11 @@ delete enemy; // Destructor called
 ```
 
 ### Section 8 Challenge
+
+This challenge involves modelling a 'Movie' class which keeps track of the name of the movie, its rating and how many times it has been watched. A 'Movies' class is then used to store a vector of 'Movie's. If a movie already exists in the database, then a message print saying that it already exists/ The code can be found [here](OOP/Challenge)
+
+### Section 9 - Operator Overloading
+
+Overloading operators allow the use of traditional operators such as +,=,* with user-defined types to make code more readable and writable. Other than the assignment operator '=' they must be explicitly defined.
+
 
