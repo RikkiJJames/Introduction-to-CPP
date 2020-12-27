@@ -1,0 +1,66 @@
+// Mystring.h
+
+#pragma once
+class Mystring
+{
+private:
+    char *str;      // pointer to a char[] that holds a C-style string
+public:
+    Mystring() // No-args contstructor
+        : str{nullptr} {
+        str = new char[1];
+        *str = '\0';
+    }                             
+    Mystring(const char *s) // Overloaded contstructor   
+        : str {nullptr} {
+        if (s==nullptr) {
+            str = new char[1];
+            *str = '\0';
+        } else {
+            str = new char[std::strlen(s)+1];
+            std::strcpy(str, s);
+        }
+    }                                   
+    Mystring(const Mystring &source) // Copy constructor
+        : str {nullptr} {
+            if (s==nullptr) {
+                str = new char[1];
+                *str = '\0';
+            } else {
+                str = new char[std::strlen(s)+1];
+                std::strcpy(str, s);
+            }
+    }        
+    ~Mystring() // Destructor
+   {
+    delete [] str;
+    }
+                                
+    void Mystring::display() const {
+        std::cout << str << " : " << get_length() << std::endl;
+    }
+    int get_length() const { return std::strlen(str); }                           // getters
+    const char *get_str() const { return str; }
+  
+};
+
+// main.cpp
+
+#include <iostream>
+#include "Mystring.h"
+
+using namespace std;
+
+int main() {
+    Mystring empty;                      // no-args constructor
+    Mystring larry("Larry");             // overloaded constructor
+    Mystring stooge {larry};            // copy constructor 
+    
+    empty.display();
+    larry.display();
+    stooge.display();
+    
+    return 0;
+}
+
+
