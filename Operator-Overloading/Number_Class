@@ -1,0 +1,119 @@
+// Number.h
+
+#pragma once
+#include <iostream>
+
+class Number
+{
+private:
+    int num;
+
+public:
+    Number();
+    Number(int a);
+    ~Number();
+    Number(const Number& source);
+    Number operator+(const Number& rhs);
+    Number operator-(const Number& rhs);
+    Number operator/(const Number& rhs);
+    Number operator*(const Number& rhs);
+    void operator+=(const Number& rhs);
+    void operator-=(const Number& rhs);
+    void operator*=(const Number& rhs);
+    void operator/=(const Number& rhs);
+    Number operator%(const Number& rhs);
+    Number get_number();
+    void display();
+};
+
+// Number.cpp
+#include "Number.h"
+
+Number::Number()
+    : num{ 0 }
+{
+}
+
+Number::Number(int a)
+    : num{ a }
+{
+}
+
+Number::Number(const Number& source)
+    : num{ source.num }
+{
+}
+Number Number::operator+(const Number& rhs)
+{
+    return this->num + rhs.num;
+}
+Number Number::operator-(const Number& rhs)
+{
+    return this->num - rhs.num;
+}
+Number Number::operator/(const Number& rhs)
+{
+    return this->num / rhs.num;
+}
+Number Number::operator*(const Number& rhs)
+{
+    return this->num * rhs.num;
+}
+void Number::operator+=(const Number& rhs)
+{
+    num += rhs.num;
+}
+void Number::operator-=(const Number& rhs)
+{
+    num -= rhs.num;
+}
+void Number::operator*=(const Number& rhs)
+{
+    num *= rhs.num;
+}
+void Number::operator/=(const Number& rhs)
+{
+    num /= rhs.num;
+}
+Number Number::operator%(const Number& rhs)
+{
+    return num % rhs.num;
+}
+
+Number Number::get_number()
+{
+
+    return num;
+}
+
+void Number::display()
+{
+
+    std::cout << num << std::endl;
+}
+Number::~Number()
+{
+}
+
+// main.cpp
+
+#include "Number.h"
+
+int main()
+{
+
+    Number a{ 5 };
+    a.display();
+    Number b;
+    b = a;
+    b.display();
+
+    Number c = a + b;
+    c.display();
+
+    a += b;
+
+    a.display();
+
+    return 0;
+}
