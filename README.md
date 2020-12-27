@@ -2417,4 +2417,162 @@ This challenge involves modelling a 'Movie' class which keeps track of the name 
 
 Overloading operators allow the use of traditional operators such as +,=,* with user-defined types to make code more readable and writable. Other than the assignment operator '=' they must be explicitly defined.
 
+An example of a class modelling a number can be seen below. To perform operations on them non-member function, or member functions can be written as shown below:
 
+```c++
+
+// Using functions
+Number result = multiply (add(a,b), divide(c,d));
+
+// Using member functions
+Number result = (a.add(b)).multiplu(c.divide(d));
+```
+
+The code written looks unreadable and hard to understand. The example below shows what it would look when the operators had been overloaded:
+
+```c++
+Number result = (a+b)*(c/d);
+```
+
+Now the user created class behave like the built in c++ types. But behind the scenes the methods and functions are still being called
+
+Although most C++ operators can be overloaded. There are a few operators that cannot - these are listed below
+
+| Operator | Description|
+| :-:| :-:|
+| :: | The scope resolution operator|
+| :? | The conditional operator |
+| .* | The pointer to member operator|
+| . | The dot operator |
+| sizeof | The size of operator |
+
+C++ operators of the for the primitive types cannot be overloaded and you cannot create new operators.
+
+The overloading will be done on the class shown [here] models a string class.
+
+#### Overloading Assignment Operator (copy)
+
+Assignment occurs when an object has already been initialised and you want to assign another object to it. 
+
+The syntax for overloading an operator can be seen below:
+
+```c++
+Class &Class::operator=(const Class &rhs);
+```
+
+The operator returns a reference to the object type to prevent extra copies being made when using pass by value. 
+
+Using the Mystring class as an example,C++ implements the operator as shown below:
+
+```c++
+Mystring &Mystring::operator=(const Mystring &rhs);
+
+s2 = s1 // what the user writes
+
+s2.operator=(s1); // c++ calls the operator= method
+```
+
+The copy assignment for the Mystring class can be seen below to do deep copies as it contains a raw pointer.
+The object on left hand side operator is referred to by the 'this' pointer and the object on the right hand side is passed into the method:
+
+```c++
+//
+Mystring &Mystring::operator=(const Mystring &rhs){
+    if (this == &rhs) // check for self-assignment
+        return *this; 
+    
+    delete [] str; // deallocate memory for this->str to overwrite the data
+    str = new char [std::strlen(rhs.str) + 1];
+    std::strcpy(str,rhs.str);
+    
+    return *this;
+```
+
+#### Overloading Operators as Member Functions
+
+C++ allows the overloading of operators as member methods or global non-member functions.
+
+##### Unary Operators As Member Methods
+
+The unary operators only work on one object and as such have an empty parameter list. include the increment '++', decrement '--'.
+
+##### Overloading operator-
+
+The example below how to use the '-' operator to make the strings lowercase:
+
+```c++
+
+Mystring rikki1 {"Rikki"};
+Mystring rikki2;
+
+rikki1.display(); // Prints 'Rikki'
+
+larry2 = -larry1; //larry1.operator-()
+
+larry1.display(); // Prints 'Rikki'
+larry2.display(); // Prints 'rikki'
+```
+
+Here's the code for overloading the operator
+
+```c++
+Mystring Mystring::operator-() const {
+    char *buff = new char{std::strlen(str) + 1};
+    std::strcpy(buff,str);
+    for (size_t i{}l i<std::strlen(buff); i++)
+        buff[i] = std::tolower(buff[i]);
+    Mystring temp {buff};
+    delete [] buff;
+    return temp;
+}
+```
+
+##### Binary Operators As Member Methods
+
+Binary operators work on two operands, it is the same as previous but there is a single argument in the parameter list.
+
+Examples working on a number class can be seen below:
+
+```c++
+//Syntax
+
+ReturnType Type::operatorOp(const &Type rhs);
+
+Number Number::operator+(const Number &rhs) const;
+Number Number::operator-(const Number &rhs) const;
+bool Number::operator==(const Number &rhs) const;
+bool Number::operator<(const Number &rhs) const;
+
+Number n1 {100}, n2 {200};
+Number n3 = n1 + n2; // n1.operator+(n2)
+n3 = n1 - n2; // n1.operator-(n2)
+if (n1 == n2) ... // n1.operator==(n2)
+```
+An example of implementing the equality operator '==' can be seen below:
+
+```c++
+bool Mystring::operator==(const Mystring &rhs) const{
+    if (std::strcmp(str,rhs.str) == 0)
+        return true;
+    else
+        return false;
+}
+
+// if (s1 == s2)
+```
+
+An example of implementing the addition operator '+' can be seen below to concatenate two strings:
+
+```c++
+
+Mystring Mystring::operator+(const Mystring &rhs) const{
+    size_t buff_size = std::strlen(str) + std::str(rhs.str) + 1;
+    char *buff = new char[buff_size];
+    std::strcpy(buff,str);
+    std::strcat(buff, rhs.str);
+    Mystring temp {buff};
+    delete [] buff;
+    return temp;
+}
+```
+#### Overloading Operators as Global Functions
