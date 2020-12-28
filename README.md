@@ -89,7 +89,7 @@
      * [Overloading Operators as Global Functions](#overloading-operators-as-global-functions)
      * [Overloading Stream Insertion & Extraction Operators](#overloading-stream-insertion--extraction-operators)
    *  [Section 9 Challenge](#section-9-challenge)
- * Inheritance
+ * [Section 10 - Inheritance](#section-10---inheritance)
  * Polymorphism
  * Smart Pointers
  * Exception Handling
@@ -2641,3 +2641,14 @@ std::istream &operator << (std::istream &is, Mystring &obj){
 ### Section 9 Challenge
 
 This challenge shows overloading operator functions for the Mystring class. They can be seen [here](Operator-Overloading/Challenge)
+
+### Section 10 - Inheritance
+
+Inheritance is the method of creating new classes from an existing class containing the data and member functions of the existing class. Modifying them to suit our needs.
+
+A list of related classes are shown below:
+
+* Player, Enemy, Level Boss, Hero etc
+* Account, Savings Account, Checking Account etc
+* Shape, Line, Oval, Square, Circle etc
+* Person, Employee, Student, Faculty etc
