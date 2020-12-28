@@ -83,7 +83,12 @@
      * [Structs vs Class](#structs-vs-class)
      * [Destructors](#destructors)
   * [Section 8 Challenge](#section-8-challenge)
- * [Section 9 - Operator Overloading](#section-7---operator-overloading)
+* [Section 9 - Operator Overloading](#section-9---operator-overloading)
+     * [Overloading Assignment Operator (Copy)](#overloading-assignment-operator-copy)
+     * [Overloading Operators as Member Functions](#overloading-operators-as-member-functions)
+     * [Overloading Operators as Global Functions](#overloading-operators-as-global-functions)
+     * [Overloading Stream Insertion & Extraction Operators](#overloading-stream-insertion--extraction-operators)
+   *  [Section 9 Challenge](#section-9-challenge)
  * Inheritance
  * Polymorphism
  * Smart Pointers
@@ -2618,3 +2623,21 @@ std::ostream &opeator << (std::ostream &os, const Mystring &obj){
     
 }
 ```
+
+##### Extraction Operator
+
+A extraction stream operator '>>' overloaded function is shown below, it returns a reference to the ostream so that insertions can be chained. Once again Do not return by value:
+
+```c++
+std::istream &operator << (std::istream &is, Mystring &obj){
+    char *buff = new char [1000]
+    is >> buff;
+    obj = Mystring{buff}; // If there is a copy assignment
+    delete [] buff;
+    return is;
+}
+```
+
+### Section 9 Challenge
+
+This challenge shows overloading operator functions for the Mystring class. They can be seen [here](Operator-Overloading/Challenge)
