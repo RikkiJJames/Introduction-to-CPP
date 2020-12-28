@@ -2576,3 +2576,45 @@ Mystring Mystring::operator+(const Mystring &rhs) const{
 }
 ```
 #### Overloading Operators as Global Functions
+
+As global functions are not member functions, there is no longer a 'this' pointer referring to the object on the lhs. To get access to private attributes, the overloaded operator functions are often declared as friends to the class. However, this isn't absolutely necessary as getters and setter methods can still be used.
+
+In the case of unary operators, there is one object in the parameter list, whereas with binary operators there are two. An example overloading the '-' operator of the Mystring class to make it lower case can be seen below:
+
+```c++
+Mystring Mystring::operator-(const Mystring &obj) const{
+    size_t buff_size = std::str(obj.str) + 1;
+    char *buff = new char[buff_size];
+    std::strcpy(buff,str);
+    std::strcat(buff, obj.str);
+    Mystring temp {buff};
+    delete [] buff;
+    return temp;
+}
+```
+
+#### Overloading Stream Insertion & Extraction Operators
+
+It doesn't make sense to implement insertion and extraction operators '<<' '>>' as member methods as the operand must be a user defined class as shown below:
+
+
+```c++
+Nystring larry;
+larry << cout; // Odd to use
+
+Player hero;
+hero >> cin; // Odd to use
+```
+
+##### Insertion Operator
+
+A insertion stream overloaded function is shown below:
+
+```c++
+
+std::ostream &opeator << (std::ostream &os, const Mystring &obj){
+    os << obj.str; // if friend function
+    // os << obj.get_str(); // 
+    
+}
+```
