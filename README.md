@@ -3051,3 +3051,12 @@ This challenge involves deriving a savings, checking and trust account from a ba
 
 ### Section 11 - Polymorphism
 
+There are several types of polymorphism in C++ which can generally be broken down into two groups - compile-time and run-time. Two compile-time examples have already being covered - overloading functions and overloading operators.
+
+#### Terminology
+
+* Compile-time / early binding / static binding - Before the programme executes
+* Run-time / late binding / dynamic binding - As the programme executes
+* Run-time polymorphism - Being able to assign different meanings to the same function at run-time.
+
+
