@@ -99,7 +99,18 @@
    * [Multiple Inheritance](#multiple-inheritance)
    * [Section 10 Challenge](#section-10-challenge)
  * [Section 11 - Polymorphism](#section-11---polymorphism)
- * Smart Pointers
+   * [Terminology](#terminology)
+   * [Static Binding](#static-binding)
+   * [Dynamic Binding](#dynamic-binding)
+   * [Using a Base Class Pointer](#using-a-base-class-pointer)
+   * [Virtual Functions](#virtual-functions)
+   * [Virtual Destructors](#virtual-destructors)
+   * [Override Specifier](#override-specifier)
+   * [The Final Specifier](#the-final-specifier)
+   * [Base Class References](#base-class-references)
+   * [Pure Virtual Functions and Abstract Classes](#pure-virtual-functions-and-abstract-classes)
+   * [Section 11 Challenge](#section-11-challenge)
+ * [Section 12 - Smart Pointers](#section-11---smart-pointers)
  * Exception Handling
  * I/O & Streams
  * Useful Functions / Libraries
@@ -3060,3 +3071,338 @@ There are several types of polymorphism in C++ which can generally be broken dow
 * Run-time polymorphism - Being able to assign different meanings to the same function at run-time.
 
 
+#### Static Binding
+
+Below is a non-polymorphic example using static binding, when an class is made dynamically the compiler uses the method depending on the pointer type:
+
+```c++
+
+Account a;
+a.withdraw(1000); // Account::withdraw()
+
+Savings b;
+b.withdraw(1000); // Savings::withdraw()
+
+Checking c;
+c.withdraw(1000); // Checking::withdraw()
+
+Trust d;
+d.withdraw(1000); // Trust::withdraw()
+
+Account *p = new Trust();
+p -> withdraw(1000); // Account::withdraw, but should be Trust::withdraw()
+```
+
+Below is another example:
+
+```c++
+void display_account(const Account &acc){ // will always use Account::display
+    acc.display();
+}
+
+Account a;
+display_account(a);
+
+Savings b;
+display_account(b);
+
+Checking c;
+display_account(c);
+
+Trust d;
+display_account(d);
+```
+
+#### Dynamic Binding
+
+However, when using dynamic binding and virtual functions we get the following behaviour:
+
+```c++
+
+Account a;
+a.withdraw(1000); // Account::withdraw()
+
+Savings b;
+b.withdraw(1000); // Savings::withdraw()
+
+Checking c;
+c.withdraw(1000); // Checking::withdraw()
+
+Trust d;
+d.withdraw(1000); // Trust::withdraw()
+
+Account *p = new Trust();
+p -> withdraw(1000); // Trust::withdraw()
+```
+As well as the example below, the diplay method is virtual in Account:
+
+```c++
+void display_account(const Account &acc){ // will always use Account::display
+    // will use the correct display method depending on the object's type
+}
+
+Account a;
+display_account(a);
+
+Savings b;
+display_account(b);
+
+Checking c;
+display_account(c);
+
+Trust d;
+display_account(d);
+```
+
+#### Using a Base Class Pointer
+
+For dynamic binding polymorphism, the following things are needed:
+
+* Inherited classes
+* A base class pointer/reference
+* virtual functions
+
+Using a base class pointer with dynamic polymorphism has the following effect:
+
+```c++
+Account *p1 = new Account();
+Account *p2 = new Savings();
+Account *p3 = new Checking();
+Account *p4 = new Trust();
+
+p1->withdraw(1000); // Account::withdraw
+p2->withdraw(1000); // Savings::withdraw
+p3->withdraw(1000); // Checking::withdraw
+p4->withdraw(1000); // Trust::withdraw
+```
+
+Another way this can be done is shown below, as the function loops through the base class pointers, the correct withdraw method is called.
+
+```c++
+Account *p1 = new Account();
+Account *p2 = new Savings();
+Account *p3 = new Checking();
+Account *p4 = new Trust();
+
+vector <Account *>  accounts = {p1, p2, p3, p4};
+
+for (auto acc_ptr: accounts){
+    acc_ptr->withdraw(1000);
+}
+
+// delete the pointers
+```
+
+#### Virtual Functions
+
+When a function is redefined in a derived class it is bound statically. Overriden functions are virtual functions and are bound dynamically, this is done by using the 'virtual' keyword and essentially allows all objects to be treated as objects of the Base class.
+
+##### Declaring Virtual Functions
+
+Firstly the function that you want to be overriden must be declared as virtual in the Base class. Once a function is declared as virtual, it remains virtual all the way down the hierachy from this point when a Base class pointer or reference is used.
+
+The syntax of declaring a virtual function is shown below:
+
+```c++
+
+class Account{
+public:
+    virtual void withdraw(double amount);
+};
+```
+Below shows overriding the withdraw function in the checking class. The virtual kyword is not required but it is best practice to include it. If an overridden function is not created, it is inherited from its base class. The function signature and return type must match **exactly** otherwise it will be treated as a redefinition and be bound statically:
+
+```c++
+class Checking:public Account {
+public:
+    virtual void withdraw (double amount);
+    ...
+}
+```
+
+An example on declaring virtual functions can be found [here](Polymorphism/Virtual_Functions)
+
+#### Virtual Destructors
+
+Problems can occur when polymorphic objects are destroyed. If a derived class is destroyed by deleting its storage via the base class pointer and the class a non-virtual destructor then the behaviour is undefined by the C++ standard.
+Derived objects must be destroyed in the correct order starting at the correct destructor.
+
+This can be solved using the virtual constructor. The rule is if a class has virtual functions it must always provide a public virtual destructor. If a base class destructor is virtual, then all derived class destructors are also virtual
+
+The syntax can be seen below:
+
+```c++
+class Account {
+public:
+    virtual void withdraw (double amount);
+    virtual ~Account();
+}
+```
+
+#### Override Specifier
+
+Base class virtual functions can be overriden, but to do so the function signature and return must be exactly the same. Otherwise the function is redefined and not overriden. Redefinition is statically bout whereas overriding is dynamically bound. C++11 provides an override specifier to ensure the compiler is overriding.
+
+An example can be seen below:
+
+```c++
+
+class Base {
+public:
+    virtual void say_hello() const {
+        cout << "Hello - I'm a Base class object" << endl;    
+    }
+   virtual ~Base() {}
+};
+
+class Derived: public Base {
+public:
+    virtual void say_hello() { // Since the const has been forgotten the function is not overriding
+        cout << "Hello - I'm a Derived class object" << endl;    
+    }
+   virtual ~Derived() {}
+};
+```
+
+When the override keyword is place after the function signature it tells the compiler that you intend to override the function. If this is not the case the compiler with produce an error, so you can fix the issue. An example is shown below:
+
+```c++
+class Base {
+public:
+    virtual void say_hello() const {
+        std::cout << "Hello - I'm a Base class object" << std::endl;
+    }
+    virtual ~Base() {}
+};
+
+class Derived: public Base {
+public:
+    virtual void say_hello()  const override {  // The compiler knows you intend to override the function
+        std::cout << "Hello - I'm a Derived class object" << std::endl;
+    }
+    virtual ~Derived() {}
+};
+```
+#### The Final Specifier
+
+The 'final' specifier has two use cases. Firstly, it prevents a class from being derived from. Secondly, it prevents a virtual method from being overriden in derived classes.
+
+The sytanx of the first use case can be seen below:
+
+```c++
+class My_Class final {
+    ... // Cannot be derived from
+};
+
+class Derived final: public Base {
+    ... // Cannot be derived from
+};
+```
+
+The syntax for the second use case can be seen below:
+
+```c++
+class A {
+public:
+    virtual void function();
+};
+
+class B: public A {
+public:
+    virtual void function() final; // Prevents further overriding
+};
+
+class C: public B {
+public:
+    virtual void function(); // Compiler error - cannot overide
+};
+```
+
+#### Base Class References
+
+As well as base class pointers, base class references can also be used with dynamic polymorphism.
+
+An example can be seen below:
+
+```c++
+
+Account a;
+Account &ref = a;
+ref.withdraw(1000); // Account::withdraw
+
+Trust t;
+Account &ref1 = t;
+ref1.withdraw(1000); // Trust::withdraw
+```
+
+Another example using functions can be seen below:
+
+```c++
+void do_withdraw(Account &account, double amount) {
+    account.withdraw(amount);
+}
+
+Account a;
+do_withdraw(a,1000); // Account::withdraw
+
+Trust t;
+do_withdraw(t,1000); // Trust::withdraw
+```
+
+#### Pure Virtual Functions and Abstract Classes
+
+An 'Abstract' class is one which cannot be instantiated and are used purely as base classes in inheritance hierachies.
+
+Classes that can be instatiate from are called 'Concrete' classes and are what has been used so far. All their member functions must be defined.
+
+Examples for abstract base classes include: Shape, Employee, Account, Player.
+These serve as a parent to derived classes that may have objects and must have at least one pure virtual function.
+
+A virtual function is used to make a class abstract and is specified with '=0' in its declaration and typically does not provide implementation as shown below:
+
+```c++
+virtual void function () = 0; // Pure virtual function
+```
+
+In order to create a concrete class the pure virtual function must be overidden, else the derived class is also abstract.
+
+An example modelling shapes and overriding draw and rotate shapes can be seen [here](Polymorphism/Abstract_Classes)
+
+##### Abstract Classes As Interfaces
+
+An interface is an abstract class that has only pure virtual functions. These functions provide a general set of services to the user of the class and each subclass is free to implement these services as needed. However, each service(method) must be implemented. Classes intended to be intefaces are usually preceded with an 'I' 
+
+The example below has a class with only a pure virtual function called print. The class also has a friend function which overloads the print function.
+
+```c++
+class I_Printable {
+    friend std::ostream &operator<<(std::ostream &os, const I_Printable &obj);
+public:
+    virtual void print(std::ostream &os) const = 0;
+    virtual ~I_Printable {};
+};
+```
+
+For any class to be printable it must be derived from 'Printable' and overide the print function as shown below:
+
+
+```c++
+class Account : public I_Printable {
+public:
+    virtual void withdraw(double amount) {
+        std::cout << "In Account::withdraw" << std::endl;
+    }
+    virtual void print(std::ostream &os) const override {
+        os << "Account display";
+    }
+    virtual ~Account() {  }
+};
+```
+
+More examples can be found [here](Polymorphism/Interface_Classes)
+
+### Section 11 Challenge
+
+This challenge involves adapting the Account classes from Section 10 and making the Account class withdraw and deposit pure virtual functions so they must be overriden in the derived savings, checking and trust accounts. It can be found [here](Polymorphism/Challenge)
+
+### Section 12 - Smart Pointers
