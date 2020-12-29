@@ -90,11 +90,19 @@
      * [Overloading Stream Insertion & Extraction Operators](#overloading-stream-insertion--extraction-operators)
    *  [Section 9 Challenge](#section-9-challenge)
  * [Section 10 - Inheritance](#section-10---inheritance)
- * Polymorphism
+   * [Terminology](#terminology)
+   * [Inheritance vs Composition](#inheritance-vs-composition)
+   * [Deriving Classes](#deriving-classes)
+   * [Constructors & Destructors](#constructors--destructors)
+   * [Copy Constructors & Overloaded Operator=](#copy-constructors--overloaded-operator)
+   * [Redefining Base Class Methods](#redefining-base-class-methods)
+   * [Multiple Inheritance](#multiple-inheritance)
+   * [Section 10 Challenge](#section-10-challenge)
+ * [Section 11 - Polymorphism](#section-11---polymorphism)
  * Smart Pointers
  * Exception Handling
  * I/O & Streams
- * Useful Functions * Libraries
+ * Useful Functions / Libraries
  * The STL
 
 
@@ -2652,3 +2660,394 @@ A list of related classes are shown below:
 * Account, Savings Account, Checking Account etc
 * Shape, Line, Oval, Square, Circle etc
 * Person, Employee, Student, Faculty etc
+
+
+Using the 'Account' class as a template. Each type of account has common functionality as shown below:
+
+* Account - balance, deposit, withdraw,...
+* Savings Account - balance, deposit, withdraw, interest rate,...
+* Checkings Account - balance, deposit, withdraw, minimum balance, per check fee,...
+* Trust Account - balance, deposit, withdraw, interest rate,...
+
+These accounts could be modelled as four seperate classes. However, there is a great deal of commonality between them and so code will be duplicated as shown below:
+
+```c++
+// With Duplication
+class Account {
+// balance, deposit, withdraw, ...
+};
+
+class Savings_Account {
+// balance, deposit, withdraw, interest rate, ...
+};
+
+class Checking_Account {
+// balance, deposit, withdraw, minimum balance, per check fee, ...
+};
+
+class Account {
+// balance, deposit, withdraw, interest rate, ...
+};
+```
+
+Using inheritance allows code to be reused and so the code will appear as below:
+
+```c++
+// With inheritance
+class Account {
+// balance, deposit, withdraw, ...
+};
+
+class Savings_Account : public Account {
+// interest rate, specialised withdraw, ...
+};
+
+class Checking_Account {
+// minimum balance, per check fee, specialised withdraw, ...
+};
+
+class Account {
+// interest rate, specialised withdraw, ...
+};
+```
+
+#### Terminology
+
+| Term | Definition |
+| :-: | :-: |
+|Inheritance|A reuse mechanism used to create new classes from existing classes|
+|Single Inheritance|Creating a new class from another 'single' class|
+|Multiple Inheritance|Creating a new class from two (or more) other classes|
+|Base Class(parent class, super class)| The class being extended or inherited from|
+|Derived Class (child class, sub class)| The class being created from the subclass, will inherit attribut es and member functions from the Base class|
+|'Is-A' relationship| Derived classes are sub-types of their Base classes (A Savings Account 'Is-A' Account)|
+|Generalisation| Combining similar classes into a single, more general class based on common attributes|
+|Specialisation| Opposite of Generalisation -creates new classes from existing classes proving more specialised attributes or operations|
+
+#### Inheritance vs Composition
+
+Both inheritance and composition allow the reuse of existing classes. However, inheritance uses a 'Is-A' relationship. e.g a an employee 'Is-A' person, a checking account 'Is-A' account. Whereas composition uses a 'Has-A' relationship. e.g A person 'Has-A' account, a player 'Has-A' Special Attack.
+
+Below is an example of how to declare an account with composition:
+
+```c++
+class Person {
+private:
+    std::string name; // Has-A name
+    Account account; // Has-A account
+};
+```
+
+#### Deriving Classes
+
+Deriving a class is done via the syntax below:
+
+```c++
+class Base {
+    // Base class members ...
+};
+
+class Derived: access-specifier Base {
+    / Derived class members ...
+}
+```
+
+The access-specifier can be: public, private, or protected. If one is not given, then private inheritance is used.
+
+An example of deriving an account class can be seen below:
+
+```c++
+class Account {
+    // Account class members ...
+};
+
+class Savings_Account: public Account {
+    // Savings_Account class members ...
+};
+```
+
+The Savings_Account 'Is-A' Account
+
+An example of creating the account and savings account classes can be found [here](Inheritance/Deriving_Savings_Account_Class)
+
+##### Types of inheritance in C++
+
+* public - Most common - Establishes an 'Is-A' relationship between derived and base classes
+* private and protected - Establises "derived class 'Has-A' base class" relationship but is different to composition
+
+###### Protected Class Modifier
+
+The protected class member access modifier is used the same as public and private. All data members that follow the 'protected' keyword will have protected access. This means they are accessible from the Base class itself, as well as classes Derived from the Base class. However, objects from neither the Base or Derived can access them. 
+
+An example can be seen below:
+
+```c++
+class Base {
+private:
+    int a; // Private Base class member
+protected:
+    int b; // Protected Base class member
+public:
+    int c; // Public Base class member
+};
+```
+
+For a class derived with public inheritance from the Base class above the variables access is shown below:
+
+|Public Inheritance| |
+| :-:| :-:|
+| Variable Name | Access |
+|a | 'a' **cannot** be accessed in the derived class|
+| b | 'b' can be accessed in the derived class - is protected |
+| c | 'c' can be accessed in the derived class - is public|  
+
+Using protected inheritance does the following:
+
+|Protected Inheritance| |
+| :-:| :-:|
+| Variable Name | Access |
+|a | 'a' **cannot** be accessed in the derived class|
+| b | 'b' can be accessed in the derived class - is protected |
+| c | 'c' can be accessed in the derived class - is protected |  
+
+Using private inheritance does the following:
+
+|Protected Inheritance| |
+| :-:| :-:|
+| Variable Name | Access |
+|a | 'a' **cannot** be accessed in the derived class|
+| b | 'b' can be accessed in the derived class - is private |
+| c | 'c' can be accessed in the derived class - is private |  
+
+An example of using access specifiers can be found [here](Inheritance/Access_Specifiers)
+
+#### Constructors & Destructors
+##### Constructors
+
+When a class is derived from a Base class, the Base part must be initialised before the derived class is initialised. Therefore when a derived object is created the Base class constructor is called, followed by the Derived class constructor. 
+
+```c++
+class Base{
+public:
+    Base() { cout << "Base constructor" << endl; }
+};
+
+class Derived : public Base {
+public:
+    Derived () { cout << "Derived constructor" << endl; }
+};
+
+int main (){
+
+Base base; // Prints "Base constructor"
+
+Derived derived; // Prints "Base constructor" "Derived constructor"
+}
+```
+
+##### Destructors
+
+Class destructors are invoked in the oposite order as constructors. The derived part of the class must be destroyed first before the base class destructor is invoked. Therefore when a derived object is destroyed the derived class destructor is called, followed by the base class destructor. Each destructor frees up the resources allocated in it's own constructors.
+
+Adding destructors to the example above results in the following:
+
+```c++
+class Base{
+public:
+    Base() { cout << "Base constructor" << endl; }
+    ~Base() { cout << "Base destructor" << endl; }
+};
+
+class Derived : public Base {
+public:
+    Derived () { cout << "Derived constructor" << endl; }
+    ~Derived () { cout << "Derived destructor" << endl; }
+};
+
+int main (){
+
+Base base; // Prints "Base constructor" "Base destructor"
+
+Derived derived; // Prints "Base constructor" "Derived constructor" followed by "Derived destructor" "Base destructor"
+}
+```
+
+A derived class does not inherit base class constructors, destructors, overloaded assignment operators and base class friend functions. However, the derived class can invoke the Base class versions.
+
+An example on using constructors and destructors can be found [here](Inheritance/Constructors_Destructors)
+
+##### Passing Arguments To Base Class Constructors
+
+The Base constructor of a derived object is initialised first, the Base constructor used can be controlled:
+
+The syntax can be seen below:
+
+```c++
+
+class Base {
+public:
+    Base ();
+    Base (int);
+    ...
+};
+
+Derived::Derived(int x)
+: Base (x)
+{
+}
+```
+If no argument was passed into the base constructor then the no-args constructor would be called.
+An example can be seen below:
+
+```c++
+
+class Base {
+private:
+    int value;
+public:
+    Base ()
+    :value{0}
+    {
+        cout << "Base no-args constructor" << endl;
+    }
+    
+    Base (int x)
+    : value {x}
+    {
+        cout << "int Base constructor" << endl;
+    }
+};
+
+class Derived: public Base{
+private:
+    int doubled_value;
+public:
+    Derived()
+    : Base{}, doubled_value{0}
+    {
+        cout << "Derived no-args constructor" << endl;
+    }
+    
+    Derived(int x)
+    : Base {x}, doubled_value {x*2}
+    {
+        cout << "int Derived constructor" << endl;
+    }
+};
+
+Base base; // Prints 'Base no-args constructor'
+
+Base base {100}; // Prints 'int Base constructor'
+
+Derived derived; // Prints 'Base no-args constructor' and 'Derived no-args constructor
+
+Derived derived {100}; // Prints 'int Base constructor' and 'int Derived constructor'
+```
+
+#### Copy Constructors & Overloaded Operator=
+
+Copy constructors and the overloaded operator= are not automatically inherited from the Base class. However, the compiler generated versions may be fine depending on the class. The Base class versions can however, be invoked from the derived class.
+
+##### Copy Constructor 
+
+If a Derived object is copied, then the Base part of it must also be copied. This can be done explicitly using the syntax below:
+
+```c++
+Derived::Derived (const Derived & other)
+    : Base(other), {Derived initialisation list}
+{
+    // Code
+}
+```
+As a Derived object 'Is-A' Base, the Base copy constructor will accepted it and slice the derived object, only taking the base part.
+
+##### Operator=
+
+The assignment operator can be done in the same way. An example can be seen below:
+
+
+```c++
+class Base {
+private:
+    int value;
+public:
+   // Same constructors as previous
+   Base &operator= (const Base &rhs) {
+       if (this != &rhs) {
+           value = rhs.value;
+       }
+       return *this;
+   }
+};
+
+class Derived: public Base {
+private:
+    int doubled_value;
+public:
+   // Same constructors as previous
+   Derived &operator= (const Derived &rhs) {
+       if (this != &rhs) {
+       Base::operator=(rhs); // Assign Base part
+           doubled_value = rhs.doubled_value;
+       }
+       return *this;
+   }
+};
+```
+
+Another example on the copy constructor and '=' operator can be found [here](Inheritance/Copy_Operator=)
+
+#### Redefining Base Class Methods
+
+A Derived class can invoke, override or redefine Base class methods which is a key concept of polymorphism which will be convered in the next section. To override the Base class method, you simply create a function in the derived class with the same name and signature as the Base class.
+An example of using and redefining Base class methods can be seen below:
+
+```c++
+class Account {
+public:
+    void deposit (double amount) {
+    balance += amount;
+    }
+};
+
+class Savings_Account: public Account {
+public:
+    void deposit (double amount) {
+    amount += some_interest; // Redefine Base class method
+    Account::deposit(amount); // Invoke Base class method
+    }
+};
+```
+
+As method binding is done at compile time, derived class objects will use Derived::deposit. However, Base::deposit can be explicitly invoked. More examples can be seen below:
+
+```c++
+
+Base b;
+b.deposit (1000.0); // Base::deposit
+
+Derived d;
+d.deposit (1000.0); // Derived::deposit
+
+Base *ptr = new Derived(); // Derived 'Is-A' Base
+ptr-> deposit(1000.0); // Base::deposit...but Derived::deposit may be more useful
+
+```
+#### Multiple Inheritance
+
+Multiple inheritance can be easily misused and can be very complex. The syntax is shown below:
+
+```c++
+
+class Department_Chair:
+    public Faculty, public Administratorv{
+    ...
+ };
+```
+
+### Section 10 Challenge
+
+This challenge involves deriving a savings, checking and trust account from a base 'account'. A savings account adds an interest rate. A Checking account has a name and balance and charges $1.50 per withdrawal transaction. A Trust account has a name, a balance, and an interest rate but any deposits of $5000.00 or more will receive a $50.00 bonus deposited to the account. It also only allows 3 transactions per calendar year. The challenge can be found [here](Inheritance/Challenge)
+
+### Section 11 - Polymorphism
+
