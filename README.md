@@ -3668,3 +3668,97 @@ This challenge involves creating three functions. The first function creates and
 representing the number of Test objects to create dynamically and add to the vector.This function will prompt the user to enter an integer, create a shared_ptr to a Test object initialized to the entered integer and add that shared pointer to the vector. Finally, the third function expects a vector of shared_ptrs to Test object and displays the data in each Test object. The code can be found [here](Smart-Pointers/Challenge)
 
 ### Section 13 - Exception Handling
+
+Exception handling is about dealing with extraordinary situation. It indicates that an extraordinary situation has been detected and can deal with it in a suitable manner. How the programme deals with the exception is dependent on the user.
+
+Some reasons for exceptions can be seen below:
+
+* Insufficient resources
+* Missing resources
+* Invalid operations
+* Range violations 
+* Underflows and overflows
+* Illegal data etc
+
+An exception is an object or primitive type that signals that an error has occured. This often contains an error message detailing why the exception was thrown
+
+An exception is thrown (raised) when the code detects that an error has occured or will occur. THe place the error occured may not know how to deal with the error. Therefore an exception can be thrown to another part of the program that does.
+
+The exception is caught (handles) by the code that handles the code. In some cases this can just mean displaying an error message and terminating the programme.
+
+#### Keywords
+
+There are three keywords used in exception handling:
+
+##### Throw 
+
+The 'throw' keyword throws an exception, is usually followed by an argument which is the exception being thrown.
+
+##### Try
+
+The 'try' keyword is followed by the code that may throw an exception - If the code throws the exception the rest of the code in the block does not execute and the try block is exited. The thrown exception is handled by a catch handler. If no catch handler exists the program terminates. It is best value to throw by value.
+
+```c++
+try { code that may throw an exception }
+```
+
+##### Catch
+
+The 'catch' keyword is followed by the exception it handles and the code to handle the exception. It is best practice to catch by reference.
+
+```c++
+catch (Exception ex) {code to handle the exception}
+```
+
+An example of dividing by zero is shown below:
+
+```c++
+double average {];
+
+try { // Try block
+				if (total == 0){
+				    throw 0; // Throw the exception
+				}
+				average = sum / total; // Won't execute if total == 0
+}
+catch (int &ex) { // exception handler
+    std::cerr << "can't divide by zero" << std::endl;
+}
+
+std::cout << "program continues" << std::endl;
+```
+
+An example calculating the MPG of a vehicle can be found [here](Exception-Handling/MPG)
+
+#### Throwing An Exception From A Function
+
+The example below shows how to calculate and throw an exception within a function:
+
+```c++
+double calculate_avg(int sum, int total) {
+    if (total == 0) {
+				    throw 0;
+				}
+				return static_cast<double> (sum) / total;
+}
+```
+
+It could be handled as follows:
+
+```c++
+double average{};
+
+try {
+    average = calculate_avg(sum,total);
+    std::cout << average << std::endl;
+}
+catch (int &ex) {
+    std::cerr << "You can't divide by zero" << std:: endl;
+}
+
+std::cout << "Bye" << std::endl;
+```
+
+An example of the MPG code rewritten into a function can be seen [here](Exception-Handling/MPG_Function)
+
+#### Handling Multiple Exceptions
