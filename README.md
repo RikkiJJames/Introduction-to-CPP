@@ -110,8 +110,15 @@
    * [Base Class References](#base-class-references)
    * [Pure Virtual Functions and Abstract Classes](#pure-virtual-functions-and-abstract-classes)
    * [Section 11 Challenge](#section-11-challenge)
- * [Section 12 - Smart Pointers](#section-11---smart-pointers)
- * Exception Handling
+ * [Section 12 - Smart Pointers](#section-12---smart-pointers)
+   * [RAII](#raii)
+   * [Declaring A Smart Pointer](#declaring-a-smart-pointer)
+   * [Unique Pointers](#unique-pointers)
+   * [Shared Pointers](#shared-pointers)
+   * [Weak Pointers](#weak-pointers)
+   * [Custom Deleters](#custom-deleters)
+   * [Section 12 Challenge](#section-12-challenge)
+ * [Section 13 - Exception Handling](#section-13---exception-handling)
  * I/O & Streams
  * Useful Functions / Libraries
  * The STL
@@ -3406,3 +3413,258 @@ More examples can be found [here](Polymorphism/Interface_Classes)
 This challenge involves adapting the Account classes from Section 10 and making the Account class withdraw and deposit pure virtual functions so they must be overriden in the derived savings, checking and trust accounts. It can be found [here](Polymorphism/Challenge)
 
 ### Section 12 - Smart Pointers
+
+Raw pointers allow the user to have flexibility with memory management. However, this comes with some issues, such as uninitialised, wild or dangling pointers as well as memory leaks.
+
+Smart pointers are objects adhere to RAII principles, preventing the types of errors mentioned previously by controlling ownership of the pointer and automatically deleting themselves when they are no longer needed.
+
+There are three main types of smart pointers:
+
+* Unique pointers 'unique_ptr'
+* Share pointers 'shared_ptr'
+* Weak pointers 'weak_ptr'
+
+To create a smart pointer the <memory> library must be included. They are instatiated similarly to vectors and wrap around a raw pointer.
+A smart pointer has much of the functionality of a raw pointer including dereferencing '*' and member selection '->'. However, pointer arithmetic is not supported. Finally custom deleters can be defined to explicitly control how the pointer is deleted. 
+ 
+#### RAII
+
+RAII (Resouce Acquisition Is Initialisation) is a common idiom used in software design based on a container objects lifetime and is used in smart pointers.
+
+* Resource Acquisition - Opening a file, allocating memory
+* Is Initialisation - The resource is acquired in a constructor
+* Resource reliquishing - Happens in the destructor, closing the file and deallocating the memory.
+ 
+#### Declaring A Smart Pointer
+
+The syntax for declaring a pointer can be seen below:
+
+```c++
+ #include <memory>
+std::smart_pointer_type <Some_Class> ptr = ...
+
+ptr -> method();
+cout << (*ptr) << endl;
+
+// ptr will be deleted automatically when it is no longer needed
+```
+
+#### Unique Pointers
+
+The unique pointer is a very efficient smart pointer that can generally be used to replace a raw pointer where it allocates storage, uses it and frees it in the same block.
+
+A unique pointer uses a template parameter 'unique_ptr<T>' which represents the datatype of the object being managed on the heap. This allows unique pointers to be initialised for any datatype. There can only be one unique pointer 'unique_ptr<T>' pointing to a certain object on the heap and it has strong ownership over what it points to. They also cannot be copied or assigned, so their copy and assignment operators are not available, but they can be moved.
+When the pointer is destroyed it automatically destroys the object it points to.
+ 
+ ##### Declaring a Unique Pointer
+ 
+ A unique pointer can be declared using the syntax below:
+ 
+ ```c++
+ #include <memory>
+ {
+ std::unique_ptr <int> p1 {new int {100}}; 
+ std::cout << *p1 << std:: endl; // Prints 100
+ *p1 = 200;
+ std::cout << *p1 << std:: endl; // Prints 200
+ }
+ // Automatically deleted
+ ```
+ 
+ The unique pointer has many methods as described below:
+ 
+  ```c++
+ #include <memory>
+ {
+ std::unique_ptr <int> p1 {new int {100}}; 
+ std::cout << p1.get() << std:: endl; // Prints pointer address e.g 0x564388
+ p1.reset(); // Sets 'p1' to a nullptr 
+ 
+ if (p1)
+     std::cout << *p1 << std::endl; // Will check if a pointer is initialised. Hence this line won't run
+
+} // Automatically deleted
+ ```
+ 
+Unique pointers can also be used to point to user defined classes:
+ 
+ ```c++
+ #include <memory>
+ {
+ std::unique_ptr <Account> p1 {new Account {"Rikki"}}; 
+ std::cout << *p1 << std:: endl; // Displays account
+ 
+p1-> deposit(1000);
+p1->withdraw(500);
+
+} // Automatically deleted
+ ```
+ 
+The following example shows a vector containing int unique pointers. When a unique pointer is initialised. It cannot be pushed back into the vector as it is unique and instead must be moved, giving ownership to the vector. The original pointer is then nulled:
+ 
+```c++
+#include <memory>
+{
+std::vector<std::unique_ptr<int>> vec;
+ 
+std::unique_ptr<int> ptr {new int{100}};
+ 
+vec.push_back(ptr); // Error - cannot copy unique pointers
+ 
+vec.push_back(std::move(ptr)); // Pointer can be moved
+
+} // Automatically deleted
+ ```
+ 
+Since C++14 there is a better method to initialise smart pointers using the 'make_unique' function. This returns a unique pointer of the specified type and allows the user to pass initialisation values into the constructor of the managed object. The 'new' keyword is no longer needed and the 'auto' keyword can be used to have the compiler deduce the type of pointer 'make_unique' returns. An example can be seen below:
+ 
+ ```c++
+#include <memory>
+
+std::unique_ptr<int> p1 = std::make_unique<int>(100); // Unique pointer pointing to 100
+ 
+std::unique_ptr<Account> p1 = std::make_unique<Account>("Rikki",5000); // Unique pointer pointing to an account with the name "Rikki" and a balance of 5000
+ 
+auto p3 = std::make_unique<Player>("Hero",100,100);
+ ```
+ 
+Some more examples using unique pointers can be found [here](Smart-Pointers/Unique_Pointers)
+ 
+#### Shared Pointers
+ 
+Shared pointers are smart pointers that provide shared ownership of heap objects. Therefore multiple shared_ptrs can point to the same object on the heap. A shared pointer can be assigned, copied and moved and when the use count is zero, the managed object on the heap is destroyed. Although unique points can manage arrays on the heap, shared pointers do not support it by default.
+
+##### Declaring Shared Pointers
+
+The syntax for declaring a shared pointer is the same as unique pointers as shown below:
+
+```c++
+ #include <memory>
+ {
+ std::shared_ptr <int> p1 {new int {100}}; 
+ std::cout << *p1 << std:: endl; // Prints 100
+ *p1 = 200;
+ std::cout << *p1 << std:: endl; // Prints 200
+} // Automatically deleted
+```
+
+Shared Pointers also have some useful methods, the use_count returns the number of shared_pointer objects managing the same heap object:
+
+```c++
+#include <memory>
+
+std::shared_ptr<int> p1 {new int {100}};
+std::cout <<p1.use_count () << std::endl; // Prints 1
+
+std::shared_ptr<int> p2 {p1}; // shared ownership
+std::cout <<p1.use_count () << std::endl; // Prints 2
+std::cout <<p1.use_count () << std::endl; // Prints 2
+p1.reset();
+std::cout <<p1.use_count () << std::endl; // Prints 0
+std::cout <<p2.use_count () << std::endl; // Prints 1
+```
+
+ Shared pointers can also be used to point to user defined classes:
+ 
+ ```c++
+ #include <memory>
+ {
+ std::shared_ptr <Account> p1 {new Account {"Rikki"}}; 
+ std::cout << *p1 << std:: endl; // Displays account
+ 
+p1-> deposit(1000);
+p1->withdraw(500);
+
+} // Automatically deleted
+ ```
+ 
+ Unlike unique pointers, shared pointers can be copied, assigned and moved.
+ 
+ ```c++
+#include <memory>
+{
+std::vector<std::shared_ptr<int>> vec;
+ 
+std::shared_ptr<int> ptr {new int{100}};
+ 
+vec.push_back(ptr); // Copying is allowed
+ 
+std::cout <<ptr.use_count () << std::endl; // Prints 2 - One from ptr, one from copy in vec
+
+} // Automatically deleted
+ ```
+
+The 'make_shared' function was introduced int C++11 and works similarly to the unque pointer. However, when the use_count becomes 0 the heap object is deallocated. An example can be seen below:
+ 
+ ```c++
+{
+std::shared_ptr<int> p1 = std::make_shared<int>(100); // use_count : 1
+std::shared_ptr<int> p2 {p1}; // use_count : 2
+std::shared_ptr<int> p3;
+p3 = p1; // use_count : 3
+}
+// Using 'auto'
+{
+auto p1 = std::make_shared<int>(100); // use_count : 1
+std::shared_ptr<int> p2 {p1}; // use_count : 2
+std::shared_ptr<int> p3;
+p3 = p1; // use_count : 3
+}
+```
+
+More examples using shared pointers can be found [here](Smart_Pointers/Shared_Pointers)
+
+#### Weak Pointers
+
+Weak pointers provide a non-owning 'weak' reference to an object. It is always created from a 'shared_ptr' but does not increment or decrement the use count. They are used to prevent strong reference cycles which could prevent objects from being deleted and to temporary reference another object such as an iterator pointer that traverses a list of nodes.
+
+##### Circular References
+
+If there are two objects where A refers to B and B refers to A. The shared strong ownership will prevent heap deallocation. Weak pointers fix this issue. If A owns B then B can have a weak pointer to A and heap storage can be deallocated properly.
+
+An example on weak pointers can be found [here](Smart-Pointers/Weak_Pointers)
+
+#### Custom Deleters
+
+When a smart pointer is destroyed, more than the object on the heap needs to be deallocated. These are special use-cases that C++ smart pointers allow using custom deleters. However, you cannot use the 'make_unique' or 'make_shared' functions with them.
+
+##### Using Functions
+
+Custom deleters can be written using functions or lamdas. An example using a function can be seen below:
+
+```c++
+void my_deleter(Some_Class *raw_pointer){
+    // custom deleter code
+    delete raw_pointer;
+}
+
+shared_ptr<Some_Class> ptr {new Some_class{}, my_deleter};
+```
+
+Another example can be seen below:
+
+```c++
+void my_deleter(Test *ptr){
+    cout << "This is the custom deleter" << endl
+    delete ptr;
+}
+
+shared_ptr<My_Class> ptr {new My_Class{}, my_deleter};
+```
+An example using lambda expressions can be seen below, in a nutshell a lambda is an anonymous function that has no name as is defined inline where it is expected to be used:
+
+```c++
+shared_ptr<Test> ptr (new My_Class{}, [] (Test *ptr){
+    cout << "Using the custom deleter" << endl;
+    delete ptr;
+});
+```
+
+Another example on using custom deleters can be found [here](Smart-Pointers/Custom_Deleters)
+
+### Section 12 Challenge
+
+This challenge involves creating three functions. The first function creates and returns a unique_ptr to a vector of shared_ptrs to Test objects. The second function expects a vector of shared pointers to Test objects and a int
+representing the number of Test objects to create dynamically and add to the vector.This function will prompt the user to enter an integer, create a shared_ptr to a Test object initialized to the entered integer and add that shared pointer to the vector. Finally, the third function expects a vector of shared_ptrs to Test object and displays the data in each Test object. The code can be found [here](Smart-Pointers/Challenge)
+
+### Section 13 - Exception Handling
