@@ -119,7 +119,14 @@
    * [Custom Deleters](#custom-deleters)
    * [Section 12 Challenge](#section-12-challenge)
  * [Section 13 - Exception Handling](#section-13---exception-handling)
- * I/O & Streams
+   * [Keywords](#keywords)
+   * [Throwing An Exception From A Function](#throwing-an-exception-from-a-function)
+   * [Handling Multiple Exceptions](#handling-multiple-exceptions)
+   * [Stack Unwinding](#stack-unwinding)
+   * [Class Level Exceptions](#class-level-exceptions)
+   * [The C++ std::exception Class Hierarchy](#the-c-stdexception-class-hierarchy)
+   * [Section 13 Challenge](#section-13-challenge)
+ * [Section 14 - I/O & Streams](#section-14---io--streams)
  * Useful Functions / Libraries
  * The STL
 
@@ -3716,10 +3723,10 @@ An example of dividing by zero is shown below:
 double average {];
 
 try { // Try block
-				if (total == 0){
-				    throw 0; // Throw the exception
-				}
-				average = sum / total; // Won't execute if total == 0
+    if (total == 0){
+        throw 0; // Throw the exception
+}
+ average = sum / total; // Won't execute if total == 0
 }
 catch (int &ex) { // exception handler
     std::cerr << "can't divide by zero" << std::endl;
@@ -3737,9 +3744,9 @@ The example below shows how to calculate and throw an exception within a functio
 ```c++
 double calculate_avg(int sum, int total) {
     if (total == 0) {
-				    throw 0;
-				}
-				return static_cast<double> (sum) / total;
+        throw 0;
+}
+return static_cast<double> (sum) / total;
 }
 ```
 
@@ -3794,4 +3801,128 @@ catch (...){ // Catch all handler - will trigger regardless of the type of excep
 
 #### Stack Unwinding
 
-If an exception is thrown but not caught in the current scope 
+If an exception is thrown but not caught in the current scope, C++ will try and find a handler for the exception by unwinding the stack. THe function in which the exception was not caught terminates and is removed from the call stack. 
+If this function uses a try block then catch blocks are checked for a match. If no try block was used or the catch handler doesn't match. Then stack unwinding happens again. If the stack is unwound back to 'main' and no catch handler handles the exception the program terminates. 
+
+An example using stack unwinding can be found [her](Exception-Handling/Stack_Unwinding)
+
+#### Creating User-Defined Exception Classes
+
+The best practice is to throw and object, not a primitive type. Throwing by value and catching by reference (or const reference)
+
+Below is the syntax to create the user-defined exception classes that will be thrown instead of primitive datatypes:
+
+```c++
+class DivideByZeroException {
+};
+
+class NegativeValueException {
+};
+```
+
+Here's how the code would look throwing the exception classes:
+
+```c++
+
+double calculate_mpg (int miles, int gallons) {
+    if (gallons == 0)
+        throw DivideByZeroException();
+    if (miles < 0 || gallons < 0)
+        throw NegativeValueException();
+    return static _cast <double> (miles) / gallons;
+}
+
+double miles_per_gallon {};
+try {
+    average = calculate_mpg(miles,gallons);
+    std::cout << miles_per_gallon << std::endl;
+}
+catch (const DivideByZeroException &ex) {
+    std::cerr << "You can't divide by zero" << std:: endl;
+}
+catch (const NegativeValueException &ex) {
+    std::cerr << "Negative values aren't allowed" << std:: endl;
+}
+std::cout << "Bye" << std::endl;
+```
+
+#### Class Level Exceptions
+
+Exceptions can be thrown from class methods, constructors and destructors. In methods it works the same way they have for the functions. Although constructors can also fail, they do not return any values so they can't return a boolean or error code. They could fail for many reasons, for example when trying to allocate memory dynamically or open a file that doesn't exist. It is best practice is to never throw exceptions from a destructor. 
+
+An example of constructor exceptions can be seen below:
+
+```c++
+Account::Account (std::string name, double balance) // Account Constructor
+    :name {name}, balance {balance} {
+    
+    if (balance < 0.0)
+       throuw IllegalBalanceException {};
+}
+
+// Using the exception
+
+try {
+    std::unique_ptr <Account> moes_account = std::make_unique <Checking_Account> ("Moe,-10.0);
+}
+
+catch (const IllegalBalanceException &ex) {
+    std::cerr << "Couldn't create account" << std::endl;
+}
+```
+
+#### The C++ std::exception Class Hierarchy
+
+C++ provides a class hierarchy of exception classes. 'std::exception' is the base class and all subclasses provide the virtual function 'what()' which returns a s-style string with a description of the exception that occured. User-defined excpetion subclasses can be created to display whatever message you want.
+
+```c++
+virtual const char *what() const noexcept;
+```
+
+An example of recreating the illegal balance exception as a subclass of 'std::exception' is shown below. The 'noexcept' keyword tells the compiler that those methods will not throw exceptions. The destructor is 'noexcept' by default. If an exception is thrown from one of those methods the program will terminate and they will not be handled:
+
+```c++
+class IllegalBalanceException: public std::exception
+{
+public: 
+    IllegalBalanceException() noexcept = default;  // Default constructor
+    ~IllegalBalanceException() = default; // Default destructor
+    virtual const char* what() const noexcept {
+        return "Illegal balance exception";
+    }
+};
+```
+
+The modified account class constructor can be found below:
+
+```c++
+Account::Account(std::string name, double balance)
+    : name {name}, balance {balance}
+{
+    if (balance < 0.0) {
+        throw IllegalBalanceException{};
+    }
+}
+```
+
+The example below creates an account object and the catch handler:
+
+```c++
+try {
+    auto moes_account = std::make_unique <Checking_Account> ("Moe,-10.0);
+    
+    std::cout << "Moes's account has been created" << std::endl; 
+}
+
+catch (const IllegalBalanceException &ex) {
+    std::cerr << ex.what() << std::endl; // displays "Illegal balance exception"
+}
+```
+
+Another example using the std::exception class can be found [here](Exception-Handling/std::exception)
+
+### Section 13 Challenge
+
+This challenge uses the account classes designed in [section 11](#section-11-challenge) and incorporates an IllegalBalanceExceptions as well as a InsufficientFundsException. The code can be found [here](Exception-Handling/Challenge)
+
+### Section 14 - I/O & Streams
