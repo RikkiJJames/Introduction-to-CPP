@@ -3762,3 +3762,36 @@ std::cout << "Bye" << std::endl;
 An example of the MPG code rewritten into a function can be seen [here](Exception-Handling/MPG_Function)
 
 #### Handling Multiple Exceptions
+
+A function can fail in several ways, for instance when calculating the MPG of a vehicle, the function can fail when 'gallons' is zero or either 'miles' or gallons are negative. An example can be seen below:
+
+```c++
+double calculate_mpg (int miles, int gallons) {
+    if (gallons == 0)
+        throw 0;
+    if (miles < 0 || gallons < 0)
+        throw std::string {"Negative value error"};
+    return static _cast <double> (miles) / gallons;
+}
+
+double miles_per_gallons {};
+try {
+    miles_per_gallon = calculate_mpg(miles, gallons);
+    std:;cout << miles_per_gallons << std::endl;
+}
+catch (int &ex) {
+    std::cerr << "You can't divide by zero" << std::endl;
+}
+
+catch (std::string &ex) {
+    std::cerr << ex << std:: endl;
+}
+
+catch (...){ // Catch all handler - will trigger regardless of the type of exception thrown
+    std::cerr << "Unknown exception" << std::endl;
+}
+```
+
+#### Stack Unwinding
+
+If an exception is thrown but not caught in the current scope 
