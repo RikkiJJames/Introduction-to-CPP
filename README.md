@@ -3926,3 +3926,82 @@ Another example using the std::exception class can be found [here](Exception-Han
 This challenge uses the account classes designed in [section 11](#section-11-challenge) and incorporates an IllegalBalanceExceptions as well as a InsufficientFundsException. The code can be found [here](Exception-Handling/Challenge)
 
 ### Section 14 - I/O & Streams
+
+C++ uses streams as an interface between the program and input and output devices. Input streams provide data to the program and the output stream receives data from the program.
+
+#### Common Header Files
+
+Below are some of the common header files to use streams:
+
+|Header File| Description|
+|:-:|:-:|
+|iostream| Provides definitions for formatted input and output from/to streams|
+|fstream| Provides definitions for formatted input and output from/to file streams|
+|iomanip| Provides definitions for manipulators used to format stream I/O|
+
+#### Common Stream Classes
+
+Including these header files allows access to some of the commonly used stream classes shown below:
+
+|Class| Description|
+|:-:|:-:|
+|ios| Provides basic support for formatted and unformatted I/O operations. Base class for most other classes|
+|ifstream| Provides high-level input operations on file-based streams|
+|ofstream|Provides high-level output operations on file-based streams|
+|fstream| Provides high-level I/O operations on file-based streams. Derived from 'ofstream' and 'ifstream'|
+|stringstream| Provides high-level I/O operations on memory-based strings. Derived from 'istringstream' and 'ostringstream'|
+
+#### Global Stream Objects
+
+All these objects are global and are initialised before 'main' executes. To use them <iostream> must be included.
+
+|Object| Description|
+|:-:|:-:|
+|cin| Standard input stream - by default 'connected' to the keyboard and is and instance of 'istream'|
+|cout| Standard output stream - by default 'connected' to the console and is and instance of 'ostream'|
+|cerr| Standard error stream - by default 'connected' to the console and is and instance of 'ostream - (unbuffered)'|
+|clog| Standard log stream - by default 'connected' to the console and is and instance of 'ostream - (unbuffered)'|
+
+#### Stream Manipulators
+
+C++ streams have many useful functions to ocntrol formatting and be used on input and output streams. The time of the effect on the stream varies, in some instances it will last for the duration of the program. Whereas for others it lasts until the next object is placed on the stream.
+
+To use stream manipulatorsm you must include <iomanip> and they typically come in two versions: A member version and a manipulator versions as seen below:
+
+```c++
+std::cout.width(10); // member function
+std::cout << std::setw(10); // manipulator - overloaders insertion operator
+```
+
+Some common stream manipulators are shown below:
+
+|Datatype| Examples|
+|:-:|:-:|
+|Boolean| boolalpha, noboolalpha|
+|Integer| dec, hex, oct, showbase, noshowbase, showpos, noshowpos, uppercase, nouppercase
+|Floating Point| fixed, scientific, setprecision, showpoint, noshowpoint, showpos, noshowpos|
+|Field width, justification and fill|setw,left,right,internal,setfill|
+|Others|endl, flush, skipws, noskipws, ws|
+
+#### Stream Manipulators - Boolean
+
+By default a boolean value is displayed as 1 or 0 when true or false respectively. However, sometimes 'true' or 'false' is more appropriate. This can be done with the 'boolalpha' keyword. Once 'boolalpha' is used, it will remain for all further boolean output. To revert back 'noboolalpha' can be used. The syntax is shown below:
+
+```c++
+std::cout << (10 == 10) << std::endl; // Prints 1
+std::cout << (10 == 20) << std::endl; // Prints 0
+
+std::cout << std::boolalpha;
+
+std::cout << (10 == 10) << std::endl; // Prints true
+std::cout << (10 == 20) << std::endl; // Prints false
+```
+
+Another example of using boolean stream manipulators can be found [here](IO-&-Streams/Stream_Manipulators_Boolean)
+
+#### Stream Manipulators - Integers
+
+Integers have four basic formatting options and have the following defualts:
+
+* dec (base 10) - Can also be displayed in base oct (base 8) or hexidecimal (base 16)
+* noshowbase - Prefix used to show hexadecimal or octal 
