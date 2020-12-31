@@ -4005,3 +4005,141 @@ Integers have four basic formatting options and have the following defualts:
 
 * dec (base 10) - Can also be displayed in base oct (base 8) or hexidecimal (base 16)
 * noshowbase - Prefix used to show hexadecimal or octal 
+* nouppercase - when displauing a prefix and hex values it will be lowercase
+* noshowpos - no '+' is displayed for positive number
+
+These manipulators affects all futher input to the stream
+
+##### Setting Base
+
+The example below shows how to change the base of an integer:
+
+```c++
+int num {255};
+
+std::cout << std::dec << num << std::endl; // Prints 255
+std::cout << std::hex << num << std::endl; // Prints ff
+std::cout << std::oct << num << std::endl; // Prints 377
+```
+
+##### Showing The Base
+
+The example below shows how to show the base of the integer being printed:
+
+```c++
+int num {255};
+
+std::cout << std::showbase;
+std::cout << std::dec << num << std::endl; // Prints 255
+std::cout << std::hex << num << std::endl; // Prints 0xff - 0x is the prefix for hexadecimal
+std::cout << std::oct << num << std::endl; // Prints 0377 - 0 is the prefix for octal
+```
+
+##### Showing Hex In Uppercase
+
+The example below shows how to show hex numbers in uppercase:
+
+```c++
+int num {255};
+
+std::cout << std::showbase << std::uppercase;
+std::cout << std::hex << num << std::endl; // Prints 0XFF
+```
+
+##### Showing The Positive Sign
+
+The example below shows how to display the '+' sign for positive integers:
+
+```c++
+int num1 {255};
+int num2 {-255};
+
+std::cout << num1 << std::endl; // Prints 255
+std::cout << num2 << std::endl; // Prints -255
+std::cout << std::showpos;
+
+std::cout << num1 << std::endl; // Prints +255
+std::cout << num2 << std::endl; // Prints -255
+```
+
+An further example using integer manipulators can be found [here](IO-&-Streams/Stream_Manipulators_Integer)
+
+#### Stream Manipulators - Floating Point
+
+Floating Point values have five basic formatting options and have the following defualts:
+
+* setprecision - number of digits displayer (default - 6)
+* fixed - not fixed to a specific number of digits after the decimal point
+* noshowpoint - trailing zeros are not displayed
+* nouppercase - when displaying in scientific notation
+* noshowpos - no '+' is displayed for positive numbers
+
+The manipulators affect all further output to the stream.
+
+
+##### Setting Precision
+
+By default the number of digits displayed is 6 digits and rounding always occurs as shown below:
+
+```c++
+double num {1234.5678};
+
+std::cout << num << std::endl; // Prints 1234.57 // Precision is 6 and rounding occurs
+```
+
+If C++ can't represent the number in 6 digits then it will use scientific notation as seen below:
+
+```c++
+double num {123456789.987654321};
+
+std::cout << num << std::endl; // Prints 1.23457e+008  // Precision is still 6 and rounding occurs
+```
+
+To change the number of digits printed the 'setprecision' manipulator can be used, as shown below:
+
+```c++
+double num {123456789.987654321};
+
+std::cout << std::setprecision(9);
+
+std::cout << num << std::endl; // Prints 123456790, rounding still occurs 
+```
+
+##### Fixing Decimal Precision
+
+The number of values after the decimal can be fixed using the 'fixed' manipulator, as shown below:
+
+```c++
+double num {123456789.987654321};
+
+std::cout << std::fixed;
+
+std::cout << num << std::endl; // Prints 123456789.987654, will display 6 precision from the decimal
+
+std::cout << std::setprecision(3) << std::fixed;
+std::cout << num << std::endl; // Prints 123456789.988, display precision 3 from the decimal
+```
+
+##### Printing Floating Point Using Scientific Notation
+
+The example below represents the floating point value in scientific notation:
+
+```c++
+double num {123456789.987654321};
+
+std::cout << std::setprecision(3) << std::scientific;
+std::cout << num << std::endl; // Prints 1.23e+008, display precision 3 then scientific notation
+```
+
+###### Printing Scientific Notation In Uppercase
+
+
+```c++
+double num {123456789.987654321};
+
+std::cout << std::setprecision(3) 
+          << std::scientific
+          << std::uppercase;
+          
+std::cout << num << std::endl; // Prints 1.23+E008, display precision 3 then scientific notation
+```
