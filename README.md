@@ -127,7 +127,7 @@
    * [The C++ std::exception Class Hierarchy](#the-c-stdexception-class-hierarchy)
    * [Section 13 Challenge](#section-13-challenge)
  * [Section 14 - I/O & Streams](#section-14---io--streams)
-   * [I/O](#IO)
+   * [I/O](#io)
      * [Common Header Files](#common-header-files)
      * [Common Stream Classes](#common-stream-classes)
      * [Global Stream Objects](#global-stream-objects)
@@ -142,9 +142,7 @@
      * [Closing A File](#closing-a-file)
      * [Writing To A Text File](#writing-to-a-text-file)
      * [String Streams](#string-streams)
- * [Section 15 - The STL]
- * Useful Functions / Libraries
-
+ * [Section 15 - The STL](#section-15---the-stl)
 
  ### Section 1 - Variables & Constants
 
