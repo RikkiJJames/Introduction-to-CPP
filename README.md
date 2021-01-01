@@ -127,8 +127,23 @@
    * [The C++ std::exception Class Hierarchy](#the-c-stdexception-class-hierarchy)
    * [Section 13 Challenge](#section-13-challenge)
  * [Section 14 - I/O & Streams](#section-14---io--streams)
+   * [I/O](#IO)
+     * [Common Header Files](#common-header-files)
+     * [Common Stream Classes](#common-stream-classes)
+     * [Global Stream Objects](#global-stream-objects)
+   * [Stream Manipulators](#stream-manipulators)
+     * [Stream Manipulators - Boolean](#stream-manipulators---boolean)
+     * [Stream Manipulators - Integers](#stream-manipulators---integers)
+     * [Stream Manipulators - Floating Point](#stream-manipulators---floating-point)
+     * [Stream Manipulators - Align & Fill](#stream-manipulators---align--fill)
+   * [Using Files](#using-files)
+     * [Reading From a Text File](#reading-from-a-text-file)
+     * [Reading From A File](#reading-from-a-file)
+     * [Closing A File](#closing-a-file)
+     * [Writing To A Text File](#writing-to-a-text-file)
+     * [String Streams](#string-streams)
+ * [Section 15 - The STL]
  * Useful Functions / Libraries
- * The STL
 
 
  ### Section 1 - Variables & Constants
@@ -3927,6 +3942,8 @@ This challenge uses the account classes designed in [section 11](#section-11-cha
 
 ### Section 14 - I/O & Streams
 
+### I/O
+
 C++ uses streams as an interface between the program and input and output devices. Input streams provide data to the program and the output stream receives data from the program.
 
 #### Common Header Files
@@ -3962,7 +3979,7 @@ All these objects are global and are initialised before 'main' executes. To use 
 |cerr| Standard error stream - by default 'connected' to the console and is and instance of 'ostream - (unbuffered)'|
 |clog| Standard log stream - by default 'connected' to the console and is and instance of 'ostream - (unbuffered)'|
 
-#### Stream Manipulators
+### Stream Manipulators
 
 C++ streams have many useful functions to ocntrol formatting and be used on input and output streams. The time of the effect on the stream varies, in some instances it will last for the duration of the program. Whereas for others it lasts until the next object is placed on the stream.
 
@@ -3988,6 +4005,8 @@ Some common stream manipulators are shown below:
 By default a boolean value is displayed as 1 or 0 when true or false respectively. However, sometimes 'true' or 'false' is more appropriate. This can be done with the 'boolalpha' keyword. Once 'boolalpha' is used, it will remain for all further boolean output. To revert back 'noboolalpha' can be used. The syntax is shown below:
 
 ```c++
+#include <iomanip>
+
 std::cout << (10 == 10) << std::endl; // Prints 1
 std::cout << (10 == 20) << std::endl; // Prints 0
 
@@ -4015,6 +4034,8 @@ These manipulators affects all futher input to the stream
 The example below shows how to change the base of an integer:
 
 ```c++
+#include <iomanip>
+
 int num {255};
 
 std::cout << std::dec << num << std::endl; // Prints 255
@@ -4027,6 +4048,8 @@ std::cout << std::oct << num << std::endl; // Prints 377
 The example below shows how to show the base of the integer being printed:
 
 ```c++
+#include <iomanip>
+
 int num {255};
 
 std::cout << std::showbase;
@@ -4040,6 +4063,8 @@ std::cout << std::oct << num << std::endl; // Prints 0377 - 0 is the prefix for 
 The example below shows how to show hex numbers in uppercase:
 
 ```c++
+#include <iomanip>
+
 int num {255};
 
 std::cout << std::showbase << std::uppercase;
@@ -4051,6 +4076,8 @@ std::cout << std::hex << num << std::endl; // Prints 0XFF
 The example below shows how to display the '+' sign for positive integers:
 
 ```c++
+#include <iomanip>
+
 int num1 {255};
 int num2 {-255};
 
@@ -4082,6 +4109,8 @@ The manipulators affect all further output to the stream.
 By default the number of digits displayed is 6 digits and rounding always occurs as shown below:
 
 ```c++
+#include <iomanip>
+
 double num {1234.5678};
 
 std::cout << num << std::endl; // Prints 1234.57 // Precision is 6 and rounding occurs
@@ -4090,6 +4119,8 @@ std::cout << num << std::endl; // Prints 1234.57 // Precision is 6 and rounding 
 If C++ can't represent the number in 6 digits then it will use scientific notation as seen below:
 
 ```c++
+#include <iomanip>
+
 double num {123456789.987654321};
 
 std::cout << num << std::endl; // Prints 1.23457e+008  // Precision is still 6 and rounding occurs
@@ -4098,6 +4129,8 @@ std::cout << num << std::endl; // Prints 1.23457e+008  // Precision is still 6 a
 To change the number of digits printed the 'setprecision' manipulator can be used, as shown below:
 
 ```c++
+#include <iomanip>
+
 double num {123456789.987654321};
 
 std::cout << std::setprecision(9);
@@ -4110,6 +4143,8 @@ std::cout << num << std::endl; // Prints 123456790, rounding still occurs
 The number of values after the decimal can be fixed using the 'fixed' manipulator, as shown below:
 
 ```c++
+#include <iomanip>
+
 double num {123456789.987654321};
 
 std::cout << std::fixed;
@@ -4125,6 +4160,8 @@ std::cout << num << std::endl; // Prints 123456789.988, display precision 3 from
 The example below represents the floating point value in scientific notation:
 
 ```c++
+#include <iomanip>
+
 double num {123456789.987654321};
 
 std::cout << std::setprecision(3) << std::scientific;
@@ -4135,6 +4172,8 @@ std::cout << num << std::endl; // Prints 1.23e+008, display precision 3 then sci
 
 
 ```c++
+#include <iomanip>
+
 double num {123456789.987654321};
 
 std::cout << std::setprecision(3) 
@@ -4142,4 +4181,563 @@ std::cout << std::setprecision(3)
           << std::uppercase;
           
 std::cout << num << std::endl; // Prints 1.23+E008, display precision 3 then scientific notation
+```
+
+##### Showing The Positive Sign For Floating Point Numbers
+
+The 'showpos' manipulator can also be used on floating point numbers as shown below:
+
+```c++
+#include <iomanip>
+
+double num {123456789.987654321};
+
+std::cout << std::setprecision(3) 
+          << std::fixed
+          << std::showpos;
+          
+std::cout << num << std::endl; // Prints +123456789.988
+```
+
+##### Showing Trailing Zeros
+
+To show trailing zeros up to the precision value, then the 'showpoint' manipulator can be used:
+
+```c++
+#include <iomanip>
+
+double num {12.34};
+
+std::cout << num << std::endl; // Prints 12.34
+
+std::cout << std::showpoint;
+          
+std::cout << num << std::endl; // Prints 12.3400 - Adds trailing zeros up to precision default (6)
+```
+
+More examples on using manipulators for floating point values can be found [here](IO-&-Stream/Stream_Manipulators_Floating_Point)
+
+#### Stream Manipulators - Align & Fill
+
+The following stream formatting manipulators can be applied to any type of data:
+
+* setw - sets the width of output field, not set by default
+* left/right - aligns output tot the left, default is left when there is no field widtch and right when using field width
+* fill - fill whitespace with a character, not set by default and a blank space is used
+
+Some of the manipulators only affect the next data element and do not persist for the rest of the program.
+
+##### Setting the Field Width
+
+The 'setw' manipulator allows control over the field width of the output and only affects the next data element put on the stream:
+
+```c++
+double num {1234.5678};
+
+std::string hello {"Hello"};
+
+std::cout << std::setw(10) << num << hello << std::endl;
+
+/*Prints
+12345678901234567890 - ruler */
+   1234.57Hello // Prints num a width of 10 right justified - 'hello' uses defaults and is left justified
+```
+
+The following is another example using 'setw'
+
+```c++
+double num {1234.5678};
+
+std::string hello {"Hello"};
+
+std::cout << std::setw(10) << num 
+          << std::setw(10) << hello 
+          << std::setw(10) << hello << std::endl;
+/*Prints
+1234567890123456789012345678901234567890 - ruler */
+   1234.57     Hello     Hello // Prints num & hello(s) with a width of 10 to justified to the right
+```
+
+##### Justifying Data
+
+The justification can be set using the 'left' and 'right' manipulators. Once again, these only apply to the next data element placed on the stream:
+
+```c++
+double num {1234.5678};
+
+std::string hello {"Hello"};
+
+std::cout << std::setw(10) 
+          << std::left
+          << num // Manipulators will only affect num
+          << hello << std::endl;
+/*Prints
+1234567890123456789012345678901234567890 - ruler*/
+1234.57   Hello // Prints num left justified with a field width of 10 and hello uses defaults
+```
+
+Below is another example:
+
+```c++
+double num {1234.5678};
+
+std::string hello {"Hello"};
+
+std::cout << std::setw(10) << num
+          << std::setw(10) << std::right << hello
+          << std::setw(15) << std::right << hello
+          << std::endl;
+          
+/*Prints
+1234567890123456789012345678901234567890 - ruler*/
+   1234.57     Hello          Hello // 'right' does not need to be included as it is the default
+```
+
+##### Filling Fixed Width
+
+The 'setfill' manipulator persists throughout the program but only applies when there is a fixed width associated with it and fills the ws with the supplied character. An example is shown below:
+
+```c++
+double num {1234.5678};
+std::string hello {"Hello"};
+
+std::cout << std::setfill ('-');
+std::cout << std::setw(10) << num 
+          << hello << std::endl;    
+
+/*Prints
+1234567890123456789012345678901234567890 - ruler*/
+---1234.57Hello // Replaces blanks space with '-'
+```
+
+Another example can be seen below:
+
+```c++
+double num {1234.5678};
+
+std::string hello {"Hello"};
+
+std::cout << std::setfill ('*');
+std::cout << std::setw(10) << num
+          << std::setfill ('-') << std::setw(10) << hello
+          << std::setw(15) << hello
+          << std::endl;
+          
+/*Prints
+1234567890123456789012345678901234567890 - ruler*/
+***1234.57-----Hello----------Hello // Fills in the empty space with the character specified in the 'setw' manipulator which persists
+```
+
+An example using field manipulators can be found [here](IO-&-Streams/Stream_Manipulators_Field)
+
+### Using Files
+
+#### Reading From a Text File
+
+To read input from files the <fstream> header file must be included. An 'fstream' or 'ifstream' object must be declared and connect to a file to open it for reading. The data can then be read from the file via the stream and finally the stream is closed.
+ 
+##### Creating A Stream Object
+
+To open a file for reading an 'fstream' or 'ifstream' object must be declared. The syntax to do this can be seen below:
+
+```c++
+#include <fstream>
+
+std::fstream in_file { "../myfile.txt", std::ios::in }; // std::ios::in - opens the file in input mode - read only
+
+// Opening for reading in binary mode
+std::fstream in_file { "../myfile.txt", std::ios::in | std::ios::binary }; 
+//std::ios::binary - is used with non text files with binary data
+```
+
+After this the file will be opened if found. The 'fstream' can create objects that can read and write to files. However, if data is just being read, it is more common to use an 'ifstream' object as shown below:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file { "../myfile.txt"}; // std::ios::in is default
+
+// Opening for reading in binary mode
+std::ifstream in_file { "../myfile.txt", std::ios::binary }; 
+```
+
+Another way of commonly opening a file can be seen below:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file;
+std::string filename;
+std::cin >> filename; // gets the file name
+
+in_file.open(filename);
+// or
+in_file.open(filename,std::ios::binary); // Opens in binary mode
+```
+
+##### Checking If File Has Been Opened
+
+There are many ways to ensure a file has been opened successfully. One method is using the 'is_open' method, which returns a boolean determining if the file is open for reading or not. The syntax can be found below:
+
+```c++
+if (in_file.is_open()) {
+    // read from file
+} else {
+    // Program dependent action
+}
+```
+
+Another way of checking if the file can be read from is to check the 'ifstream' object itself as shown below:
+
+```c++
+if (in_file) {
+    // read from file
+} else {
+    // Program dependent action
+}
+```
+#### Reading From A File
+
+A file can be read from using the extraction operator '>>' in the same way it is used for 'cin'. An example is shown below
+
+```c++
+int num {};
+double total {};
+std::string name {};
+
+/* File Contents
+1000
+224.53
+Rikki
+*/
+
+in_file >> num >> total >> name; // 1000 is stored in num, 224.53 in total and 'Rikki' in name
+```
+
+To read a file one line at a time, the 'getline' method can be used.
+
+```c++
+std::string line {}
+
+/* File Contents
+This is a line
+*/
+
+std::getline(in_file,line);
+```
+
+Below is an example to read a text file one line at a time:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file {"../myfile.txt" }; // opens file
+std::string line {};
+
+if (!in_file) { // checks to see if file is open
+    std::cerr << "File cannot be opened" << std::endl;
+    return 1;
+}
+while (!in_file.eof()) { // while not at the end
+    std::getline(in_file,line); // read a line
+    std::cout << line << std::endl; // display the line
+}
+
+in_file.close(); // close the file
+```
+
+Another variation of the while loop can be seen below:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file {"../myfile.txt" }; // opens file
+std::string line {};
+
+if (!in_file) { // checks to see if file is open
+    std::cerr << "File cannot be opened" << std::endl;
+    return 1;
+}
+while (std::getline(in_file,line)) { // read a line
+    std::cout << line << std::endl; // display the line
+}
+
+in_file.close(); // close the file
+```
+
+The following example shows how to read a file one character a time using the 'get' method. This sometimes needs to be used as the 'getline' method depends on ws to work correctly:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file {"../myfile.txt" }; // opens file
+char c {};
+
+if (!in_file) { // checks to see if file is open
+    std::cerr << "File cannot be opened" << std::endl;
+    return 1;
+}
+while (in_file.get(c)) { // read a character
+    std::cout << c; // display the character
+}
+
+in_file.close(); // close the file
+```
+
+#### Closing A File
+
+After using a file it must be closed to flush out any unwritten data. This can be done with the 'close' method as shown below:
+
+```c++
+in_file.close();
+```
+
+#### Writing To A Text File
+
+To read input from files the <fstream> header file must be included. An 'fstream' or 'ofstream' object must be declared and connected to a file to open it for writing. If the file does not exist, C++ will create the file by default and if the file already contains data, the existing data will be removed unless the user specifies they wish to append to the existing file. After writing to the file the stream can be closed.
+ 
+##### Creating A Stream Object
+
+To open a file for writing an 'fstream' or 'ofstream' object must be declared. The syntax to do this with an 'fstream' object can be seen below:
+
+```c++
+#include <fstream>
+
+std::fstream out_file { "../myfile.txt", std::ios::out }; // std::ios::in - opens the file in output mode - write only
+
+// Opening for reading in binary mode
+std::fstream out_file { "../myfile.txt", std::ios::out | std::ios::binary }; 
+//std::ios::binary - is used with non text files with binary data
+```
+
+The example below shows how to open a file for writing using an 'ofstream' object:
+
+```c++
+#include <fstream>
+
+std::ofstream out_file { "../myfile.txt"}; // std::ios::out - The default for an ofstream object
+
+// Opening for reading in binary mode
+std::ofstream out_file { "../myfile.txt", std::ios::binary }; 
+//std::ios::binary - is used with non text files with binary data
+```
+
+Some more ways of opening a file for writing with 'ofstream' are shown below:
+
+```c++
+std::ofstream out_file { "../myfile.txt",std::ios::trunc}; // truncates (discards) contents when opening - default
+
+std::ofstream out_file { "../myfile.txt",std::ios::app}; // appends on each write
+
+std::ofstream out_file { "../myfile.txt",std::ios::ate}; // seeks to the end of stream when opening
+```
+
+Another method of opening a file using 'ofstream' objects is shown below:
+
+```c++
+#include <fstream>
+
+std::ofstream out_file;
+std::string filename;
+std::cin >> filename; // gets the file name
+
+out_file.open(filename);
+// or
+out_file.open(filename,std::ios::binary); // Opens in binary mode
+```
+
+##### Writing To A File
+
+A file can be read from using the insertion operator '<<' in the same way it is used for 'cout'. An example is shown below:
+
+```c++
+int num {1000};
+double total {224.53};
+std::string name {"Rikki"};
+
+out_file << num << "\n" 
+         << total << "\n"
+         << name << std::endl; 
+
+/* File Contents
+1000
+224.53
+Rikki
+*/
+```
+
+The example below shows how to copy a text file one line at a time:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file {"../myfile.txt"}; // opens file
+std::ofstream out_file {"../copyfile.txt"};
+
+if (!in_file) {
+    std::cerr << "Error opening file" << std::endl;
+    return 1;
+}
+
+if (!out_file) {
+    std::cerr << "File creation error" << std::endl;
+    return 1;
+}
+
+std::string line {};
+
+while (std::getline(in_file, line)) {
+    out_file <<line << std::endl;
+}
+
+in_file.close();
+out_file.close();
+```
+
+The example below shows how to copy a text file one character at a time:
+
+```c++
+#include <fstream>
+
+std::ifstream in_file {"../myfile.txt"}; // opens file
+std::ofstream out_file {"../copyfile.txt"};
+
+if (!in_file) {
+    std::cerr << "Error opening file" << std::endl;
+    return 1;
+}
+
+if (!out_file) {
+    std::cerr << "File creation error" << std::endl;
+    return 1;
+}
+
+std::string line {};
+
+while (in_file.get(c)) {
+    out_file.put(c);
+}
+
+in_file.close();
+out_file.close();
+```
+
+#### String Streams
+
+String streams allow the user to read or write from strings from memory the same ways as they'd read from a file and are very good for data validation. To use stringstreams the <sstream> header file must be included. Then a stringstream object must be declared and connected to a 'std::string'. The data can then be read/written to/from the string stream.
+
+There are three string stream classes:
+
+* stringstream - Allows you to read and write from a stringstream object
+* istringstream - Allows you to read from a stringstream object
+* ostringstream - Allows you to write from a stringstream object
+
+##### Reading From A String Stream
+
+The example below shows how to read from a string stream:
+
+```c++
+#include <sstream>
+
+int num {};
+double total {};
+std::string name {};
+
+std::string info {"Rikki 100 1234.5"};
+
+std::istringstream iss {info};
+iss >> name >> num >> total;
+```
+
+##### Writing To A String Stream
+
+The example below shows how to write data to a string stream:
+
+```c++
+#include <sstream>
+
+int num {100};
+double total {1234.5};
+std::string name {"Rikki"};
+
+
+std::ostringstream oss {};
+oss << name << " " << num << " " << total;
+std::cout << oss.str() << std:: endl; // Prints "Rikki 100 1234.5"
+```
+
+##### Validating Input With String Stream
+
+The example below shows how to validate data to a string stream:
+
+```c++
+int value {};
+std::string input {};
+
+std::cout << "Enter an integer ";
+std::cin >> input;
+
+std::stringstream ss {input};
+if (ss >> value) {
+    std::cout << "An integer was entered";
+}
+else {
+    std::cout << "An integer was not entered";
+}
+```
+
+Some more examples on stringstreams can be found [here](IO-&-Streams/Stringstreams)
+
+### Section 15 - The STL
+
+The standard template library (STL) is a library of powerful, reusable, generic classes and functions implemented using C++ templates.
+
+The STL has three main components:
+
+* Containers - Collections of objects or primitive types (array, vector, deque, stack etc)
+* Algorithms - Functions for processing sequences of elements from containers (find, max, count, accumulate, sort etc)
+* Iterators - Generate sequences of element from containers (forward, reverse, by value, by reference, constant etc)
+
+#### Types of Containers
+
+There are three types of containers:
+
+* Sequence - Maintain the order of inserted elements (array, vector, list, forward_list, deque) 
+* Associative - Insert elements in a predefined order, or no order (set, multi set, map, multi map)
+* Container Adapters - Variations of sequence or associative containers - does not support algorithms (stack, queue, priority queue)
+
+####  Types of Iterators
+
+The STL contains several types of iterators:
+
+* Input iterators - From the container to the program
+* Output iterators - From the program to the container
+* Forward iterators - Navigate one item at a time in one direction
+* Bi-directional iterators - Navigate one item at a time in both directions
+* Random access iterators - Directly access a container item
+
+#### Sort, Reverse & Accumulate
+
+Below is a simple example using a vector:
+
+```c++
+#include <vector>
+#include <algorithm>
+
+std::vector <int> v {1,7,2};
+
+std::sort(v.begin(), v.end()); // Sorts in ascending order
+
+for (auto elem: v)
+    std::cout << elem << std::endl; // Prints 1 2 7
+    
+std::reverse(v.begin(), v.end()); // Reverses the order of elements
+
+for (auto elem: v)
+    std::cout << elem << std::endl; // Prints 7 2 1
+    
+int sum {};
+
+sum = std::accumulate(v.begin(), v.end() , 0); // Third argument specifies starting value
+std::cout << sum << std::endl; // Prints 10 1+2+7
 ```
